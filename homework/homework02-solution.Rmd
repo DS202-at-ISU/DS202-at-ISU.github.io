@@ -1,0 +1,75 @@
+---
+title: 'Homework #2 - Sample Solution'
+author: "HH"
+date: "2/1/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Cars and mileage
+
+In this homework we will use the `mpg` data set, you can access the data by loading the package `ggplot2` into your R session by executing the command 
+`library(ggplot2)`. The `mpg` data includes information about fuel economy of popular car models
+for the years 1999 and 2008 as collected by the US Environmental Protection Agency.
+
+
+Most exercises are from the ggplot2 book section 2.2.1. You might find it helpful for working on the homework to read through this section.
+
+1.  List five functions that you could use to get more information about the
+mpg dataset.
+
+```
+str, head, tail, summary, dim, names
+```
+
+
+2. Using the `ggplot2` package create a scatterplot of `hwy` and `cty` and describe the relationship. Why are there so few points visible? Use a geom that helps reduce the amount of overplotting in the scatterplot.
+
+```{r}
+library(ggplot2)
+# there is a strong positive linear relationship between highway and city miles per gallon
+ggplot(mpg, aes(x = hwy, y = cty)) + geom_point()
+# there is a lot of overplotting
+
+# one solution: jitter
+ggplot(mpg, aes(x = hwy, y = cty)) + geom_jitter()
+
+```
+
+3. Apart from the US, most countries use fuel consumption (fuel consumed
+over fixed distance) rather than fuel economy (distance traveled with fixed
+amount of fuel). How could you convert `cty` and `hwy` into the European
+standard of liter/100 km? Introduce corresponding variables into the `mpg` data.
+
+```{r}
+# 1 gallon = 3.78541 liters
+# 1 mile = 1.60934 km
+# therefore 1 mpg = 1.6/3.78 km per liter
+
+mpg$cty_lkm <- 1/ (1.6/3.78 * mpg$cty) * 100
+mpg$hwy_lkm <- 1/ (1.6/3.78 * mpg$hwy) * 100
+
+```
+
+4.  Are cars in 2008 more fuel efficient than cars in 1999? Expand on your answer in (2) for a visual approach to this question. Note: you are not asked to find numeric answers. Instead, interpret plots. 
+
+```{r}
+# medians are a bit higher in 1999
+ggplot(mpg, aes(x=factor(year), y=hwy)) + geom_boxplot()
+# the very fuel efficient cars from 1999 have disappeared.
+ggplot(mpg, aes(x=factor(year), y=cty)) + geom_boxplot()
+# seems like the trend should be different
+```
+
+6. Use the `ggplot2` package to create  side-by-side boxplots of `cty` by `class`. Describe the relationship in 2-3 sentences. 
+Change the label for the y-axis to 'city miles per gallon' (see ```?ylab```).  
+
+```{r}
+ggplot(mpg, aes(x = class, y = cty))+geom_boxplot() +
+  ylab("City miles per gallon")
+```    
+compact and subcompact cars are on average the most fuel efficient cars. pickups and suvs are the least fuel efficient. one minivan is also very inefficient.
+

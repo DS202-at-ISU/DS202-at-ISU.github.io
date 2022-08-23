@@ -1,0 +1,23 @@
+---
+title: 'Homework #1'
+author: "Your Name"
+date: "1/10/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## An example of Data Science
+
+1. Download the RMarkdown file with these homework instructions to use as a template for your work.
+Make sure to replace "Your Name" in the YAML with your name.
+2. Write a paragraph (~200 words) describing an example of what you consider data science. Write your paragraph in R Markdown. Include at least 
+    a. one link to a chart or an image and 
+    b. at least one itemized or enumerated list.
+
+Note: your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio. Including the link to the image is the tricky part here. Make sure that you don't use any file structure that depends on your computing environment.
+
+
+For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it. 

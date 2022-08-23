@@ -1,0 +1,169 @@
+---
+title: "DS 202: Sample Exam"
+date: "3/27/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# March Madness
+
+
+Basketball is a multimillion dollar sports that fascinates millions of people all year round peaking in March Madness each year.
+Here, we are using play-by-play data on all NBA games on two days in Oct 2017. 
+
+## Question #1: First Overview
+
+Read the data from sample-combined-pbp-stats.csv without downloading the file locally. 
+Each line of the file describes one play in a game. 
+
+- How many rows and columns does the data have? What are the variables called?
+- each individual game is assigned a unique identifier `game_id`. How many games are recorded in the data and how many plays (number of rows) does a game have on average?
+
+
+```{r}
+# write your code here
+library(tidyverse)
+pbp <- read.csv("https://raw.githubusercontent.com/DS202-at-ISU/DS202-at-ISU.github.io/master/exams/sample-combined-pbp-stats.csv")
+dim(pbp)
+length(unique(pbp$game_id))
+pbp %>% group_by(game_id) %>% tally() %>% summary()
+
+# baseic fact-finding questions - make sure to actually write answers to each question, i.e. there are 49 variables and 2386 plays overall. ...
+```
+
+
+
+
+## Question #2: Who won? 
+
+For each game, the variable `points` keeps track of the number of points attempted in each play. 
+
+- Use functions from the `dplyr` package to work out the number of points each team scored (check `result`). Filter out all plays that are not associated with any of the teams. 
+
+- Compare your scores with the final values of home and away scores (check for `event_type` and `period`)
+
+- Using `ggplot2` plot scores by team. Sort teams by their median scores.
+
+- In a second step, use the scores to identify winning and losing teams of each game (Hint: use dplyr again and remember what `which.max` and `which.min` are doing). 
+
+- `player` keeps track of which player makes a shot. For each game,  identify which player in each team scored the most points. 
+
+
+```{r}
+scores <- pbp %>% group_by(game_id, team) %>% 
+  filter(result=="made") %>%
+  summarise(
+    score = sum(points)
+  ) %>% 
+  ungroup(team) %>%  
+  mutate(
+    team = reorder(factor(team), score, mean, na.rm=TRUE)
+  ) 
+
+pbp %>% filter(event_type=="end of period", period==4) %>% select(home_score, away_score, game_id)
+
+scores %>%
+  ggplot(aes(team, score)) + geom_point() + coord_flip()
+
+winners <- scores %>% group_by(game_id) %>%
+  mutate(winner = team[which.max(score)], 
+         loser = team[which.min(score)])
+
+players <- pbp %>% group_by(game_id, team, player) %>% 
+  filter(result=="made") %>%
+  summarise(
+    score = sum(points)
+  ) %>% ungroup(player) %>%
+  group_by(game_id, team) %>%
+  mutate(
+    mvp = rank(-score)
+  ) %>% 
+  filter(mvp==1)
+
+players
+# James LeBron has only the second highest score in these four games. 
+```
+
+## Question #3 : On the court
+
+The variables `converted_x` and `converted_y` give the location of the acting player on the court.  Check with the variable `event_type` to see, for which types of play we have geographic information.
+
+For game number  `21700003` plot the geographic location of each play on the court, colour by team and incorporate visually the play's outcome (variable `result`). Describe the result.
+
+```{r}
+pbp %>% group_by(event_type, is.na(converted_x), is.na(converted_y)) %>% tally()
+# shots and mises have geographic information
+
+pbp %>% filter(game_id==21700003) %>% 
+  ggplot(aes(x = converted_x, y = converted_y, colour=team, shape=result)) + 
+  geom_point() + coord_equal()
+
+# We see a clear pattern in the shots made and attempted. There are two tight clusters of shots attempted at the baskets, which spread out as distance increases. At the 3 point lines we can see another set of attempted shots. 
+```
+
+## Question #4: Distance hurts?
+
+Is there any evidence that shots closer to the basket are successful more often? For that,
+- introduce a new variable `d` into the data that captures the distance of a player from the basket (basket is in [0,0] for variables `original_x` and `original_y`).
+- draw side-by-side boxplots of distance by result and team (using ggplot2). Interpret.
+
+```{r}
+pbp$d <- with(pbp, sqrt(original_x^2+original_y^2))
+pbp %>% filter(team!="") %>% 
+  ggplot(aes(x = result, y = d)) +
+  facet_grid(.~team) + geom_boxplot()
+
+# there is a clear difference in the distance associated with shots made and shots missed. Distance does hurt. Shots that were made tend to be closer to the basket.
+```
+
+## Question #5: Timeline
+
+The variable `elapsed` is recorded in hour-minute-second format. Convert the information into seconds (hint: you could introduce helper variables for the conversion).
+The `elapsed` time variable starts over in each period (a period has 12 mins). Introduce a new variable called `time_played` that keeps track of the time (in seconds) from the beginning of a game to the end.
+
+Plot the timeline (`time_played`) of events (`event_type`) for game with the id `21700002` in a scatterplot. Colour by team. Comment on the result.
+
+```{r}
+library(lubridate)
+pbp <- pbp %>% separate(elapsed, into=c("hour", "minute", "second"), sep=":") %>%
+  mutate(
+  elapsed = as.numeric(minute)*60+as.numeric(second),
+  time_played = elapsed + 12*60*(period-1)
+)
+pbp %>% 
+  filter(game_id=="21700002") %>%
+  ggplot(aes(x = elapsed, y = event_type,  colour=team)) + 
+  geom_point() +
+  facet_grid(period~.)
+
+# there should be clear changes  between home and away team showing teams' plays, but on this scale this is hard to see.
+```
+
+## Question #6: Who is playing?
+
+Variables `h1` through `h5` and `a1` through `a5` are the five players of the home team and the away team on the field at that moment in positions 1 through 5.
+Reshape the data set to combine all player variables. Extract position numbers. For each game identify how many players were playing in each position. 
+
+Draw side-by-side boxplots of the number of players by position. Comment.
+
+
+```{r}
+players <- pbp %>% gather(teamposition, player, a1:h5) %>%
+  mutate(
+    position = parse_number(teamposition)
+  ) %>%
+  group_by(position, game_id) %>%
+  summarise(num_players = length(unique(player)))
+
+players %>% ggplot(aes(x = factor(position), y=num_players))  +
+  geom_boxplot() 
+
+# quite a few players are exchanged in each position throughout a game (probably about half are from each of the teams - ideally we should distinguish between home and away team)
+# position #1 has the fewest players,
+# followed by position #2. 
+# the other positions see more changes.
+```

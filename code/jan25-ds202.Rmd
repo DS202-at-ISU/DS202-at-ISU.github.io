@@ -1,0 +1,28 @@
+---
+title: "Untitled"
+author: "Heike Hofmann"
+date: "January 25, 2018"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Set of questions for the fbiwide data:
+
+- structural question: types of crimes and relationship to property/violent crime
+- structural question: what data do we have, i.e. what is a row the data
+- structural question: do we have any constraints in the data - if, so we should check on them
+- info: What state and what year had the most murders?
+- two-variable relationship: Compare population to overall number of  crimes
+- two-variable relationship: compare crime rates across larger cities
+- two-variable relationship: development of number of crimes over time?
+- two-variable relationship - with outside:relationship between # crimes and economic growth 
+- leads to complex exploration: compare cities with large crime rates to low crime rate cities (in the same state): what's different about these cities? (additional information)
+
+
+
+
+

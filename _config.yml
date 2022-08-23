@@ -1,0 +1,28 @@
+# Site settings
+name: DS 202 at ISU
+title: Data Acquisition and Exploratory Data Analysis
+email: hofmann@iastate.edu
+description: Not all data lives in nice, clean spreadsheets, not all data fits in a computer's main memory, but all data contains interesting stories for us to find.
+# Build settings
+markdown: kramdown
+url: http://localhost:4000
+markdown: kramdown
+navigation:
+- text: Home
+  url: /index.html
+- text: Schedule
+  url: /schedule.html
+- text: Labs
+  url: /labs.html
+- text: Homework
+  url: /homework.html
+- text: Midterm
+  url: /midterm.html
+- text: Final Presentations
+  url: /presentations.html
+- text: Final Projects
+  url: /projects.html
+collections:
+  topics:
+    output: true
+    permalink: /presentations/:path/

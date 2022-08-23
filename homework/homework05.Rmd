@@ -1,0 +1,50 @@
+---
+title: 'Homework #5'
+author: "Your Name"
+date: "3/22/2018"
+output: html_document
+---
+---
+title: 'Homework #5'
+author: "Your Name"
+date: "3/22/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Liquor Sales in Iowa
+
+This dataset contains the spirits purchase information of Iowa Class “E” liquor licensees by product and date of purchase from January 1, 2012 to current. The dataset can be used to analyze total spirits sales in Iowa of individual products at the store level.
+
+For all of the questions use functionality from the  `tidyverse` whenever possible.
+
+1. Download the RMarkdown file with these homework instructions to use as a template for your work.
+Make sure to replace "Your Name" in the YAML with your name.
+2. The code below downloads the data from the Iowa Portal and saves a local copy to your machine. The first time you run this code, make sure you have a good internet connection and enough space on your machine (~50 MB). If the local copy exists, re-knitting the file will load the (binary) file from disk and be much faster. 
+```{r, cache=TRUE}
+if (file.exists("alcohol.rds")) {
+  data <- readRDS("alcohol.rds")
+} else {
+  url <- "https://data.iowa.gov/api/views/m3tr-qhgy/rows.csv"
+  data <- readr::read_csv(url)
+  saveRDS(data, file="alcohol.rds")
+}
+```
+3. Data cleaning: 
+  - extract geographic latitude and longitude from the variable `Store Location`
+  - check variable types. Pick five variables that need to be converted to a different type and fix those. 
+  - extract year, month and day from the variable `Date`
+4. First overview:
+  - Plot a scatterplot of lat and long of store locations. 
+  - Provide a visual breakdown of the liquor category (by `Category Name`). Include volume sold in the breakdown.
+5. Find the daily sales liquor sales in Ames in 2017. Summarize number of sales, volume of liquor sold and amount of money spent. Plot volume sold by day (use a scatterplot of volume by day and facet by month). Describe any patterns.
+Find the dates for ISU football home games in Fall 2017. Can you see a pattern? 
+
+
+Note: your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio. 
+
+
+For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it. 

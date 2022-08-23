@@ -1,0 +1,72 @@
+---
+title: "Sample Midterm DS 202"
+author: "Heike Hofmann"
+date: "March 27, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+You have 120 min to work on answering these questions, make sure to put your answers in this document. This is the file that you will be asked to hand in.
+
+Data on all flights in and out of Des Moines (DSM) for October 2008 are available at <a href="http://www.hofroe.net/data/dsm-flights.csv">http://www.hofroe.net/data/dsm-flights.csv</a> (a copy is also available in the data folder in Canvas).<br>
+See <a href="http://stat-computing.org/dataexpo/2009/the-data.html">http://stat-computing.org/dataexpo/2009/the-data.html</a> for a description of the variables.
+
+1. Load the flights data into R. <br>
+		Determine, which flight was delayed the most on arrival. Report its row number, where it started, and by how much the flight was delayed on departure.  </p>
+
+```{r}
+# place the code for your answer here
+```
+
+2. Bring the variable 'Day' into the correct order, starting with 'Monday'.
+
+```{r}
+# place the code for your answer here
+```
+
+3. Create a new variable called 'Weekend' which has value TRUE for Saturdays and Sundays and FALSE otherwise. 
+
+```{r}
+# place the code for your answer here
+```
+
+4. Determine how many flights arrived in Des Moines on average each day of the week. 
+
+```{r}
+# place the code for your answer here
+```
+
+6. How many flights were scheduled to go to Denver (DEN)? What percentage of flights goes to Denver? 
+
+```{r}
+# place the code for your answer here
+```
+
+7. Where do most flights arriving in Des Moines come from? (use IATA code) </p>
+
+```{r}
+# place the code for your answer here
+```
+
+8. Plot boxplots of arrival delays by originating airports. Order boxplots according to increasing median arrival delay. </p>
+
+```{r}
+# place the code for your answer here
+```
+
+9. Using dplyr, determine for flights leaving DSM for each hour of the day 
+
+  - the number of flights scheduled to leave, 
+  - the percentage of flights departing late (FAA considers flights late, if they are 15 minutes or more behind the scheduled time), 
+  - the average departure delay, and 
+  - the top 3 destinations.
+
+Draw a scatterplot of average departure delay by scheduled hour of departure. Color points by top destination, adjust point size to reflect the number of flights for each hour. 
+
+```{r}
+# place the code for your answer here
+```
+

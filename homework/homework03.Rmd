@@ -1,0 +1,37 @@
+---
+title: 'Homework #3'
+author: "Your Name"
+date: "2/15/2018"
+output: html_document
+---
+---
+title: 'Homework #3'
+author: "Your Name"
+date: "2/15/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Tips at Restaurants
+
+In this homework we will use the `tips` data set. THis data set is part of the `reshape2` package. You can load the data set by executing the command:
+```{r}
+data(tips, package="reshape2")
+```
+The information contained in the data is collected by one waiter, who recorded over the course of a season information about each tip he received working in one restaurant. See `?tips` for a description of all of the variables. 
+
+1. Download the RMarkdown file with these homework instructions to use as a template for your work.
+Make sure to replace "Your Name" in the YAML with your name.
+2.  How many parties did the waiter serve? What type are the variables that he collected? Show your code. 
+3. How does the tipping amount (`tip`) depend on the overall bill (`total_bill`)? Use the `ggplot2` package to show a chart, describe the relationship in words. Describe at least two types of anomalies in the plot. What do they mean? 
+4. Introduce a variable `tiprate` into the data set, that incorporates the rate of tips. What information is available for the best tipper, what for the worst? What is the average rate for tips?
+6. How does smoking behavior and gender of the person who pays impact the  relationship between tip and total bill? Find a visualization that incorporates all four variables. Interpret the result.
+5. Use ggplot2 to find a graphical summary of the relationship between day of the week and gender of the person paying the bill. What can you say about this relationship?
+
+Note: your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio. 
+
+
+For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it. 

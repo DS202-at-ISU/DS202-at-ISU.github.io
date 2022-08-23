@@ -1,0 +1,36 @@
+---
+title: 'Homework #6'
+author: "Your Name"
+date: "4/12/2018"
+output: html_document
+---
+---
+title: 'Homework #6'
+author: "Your Name"
+date: "4/12/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Box office gross
+
+The data set `box` of the package `classdata` contains weekly box office gross for all movies in theaters in the last five years, see `?box` for a description of all variables in the data set.
+
+For all of the questions use functionality from the  `tidyverse` whenever possible.
+
+1. Download the RMarkdown file with these homework instructions to use as a template for your work.
+Make sure to replace "Your Name" in the YAML with your name.
+2. Draw a line for each movie showing total gross (`Total.Gross`) over time. Describe the plot
+3. Find monthly summaries for (a) the number of different movies in theaters and (b) box office gross. Draw lines of these summaries for each year (in two separate plots). Describe the plots in words. Are there seasonal trends?<br>
+Hint: use `lubridate` to extract `year` and `month` from the date at which box office data was released. 
+4. Find box office gross by day of the year (check `?yday`) for each year (we don't actually have daily datat - we only have data for every seven days). Plot cumulative yearly gross for each year by day of the year. Describe the plot. 
+What kind of year do you expect 2018 to be in terms of box office revenues from movies?
+
+
+Note: your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio. 
+
+
+For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it. 

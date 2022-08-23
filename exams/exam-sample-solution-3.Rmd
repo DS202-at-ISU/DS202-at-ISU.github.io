@@ -1,0 +1,127 @@
+---
+title: "Solution to Sample Midterm DS 202"
+author: "Heike Hofmann"
+date: "March 27, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Work on questions in R, make sure to keep a copy of your R code - you will be asked to submit this script at the end.
+
+Data on all flights in and out of Des Moines (DSM) for October 2008 are available at <a href="http://www.hofroe.net/data/dsm-flights.csv">http://www.hofroe.net/data/dsm-flights.csv</a>.<br>
+See <a href="http://stat-computing.org/dataexpo/2009/the-data.html">http://stat-computing.org/dataexpo/2009/the-data.html</a> for a description of the variables.
+
+1. Load the flights data into R. <br>
+		Determine, which flight was delayed the most on arrival. Report its row number, where it started, and by how much the flight was delayed on departure.  </p>
+```{r}
+flights <- read.csv("http://www.hofroe.net/data/dsm-flights.csv")
+
+# which flight was delayed the worst? - where did the flight start? 
+# was it delayed when departing? 
+which.max(flights$ArrDelay)
+# 1516
+
+flights[which.max(flights$ArrDelay), c("Origin", "DepDelay")]
+#     Origin DepDelay
+#1516    DSM      614
+```
+
+2. Bring the variable 'Day' into the correct order, starting with 'Monday'.
+
+```{r}
+summary(flights$Day)
+#   Friday    Monday  Saturday    Sunday  Thursday   Tuesday Wednesday 
+#      456       368       248       336       460       360       459 
+
+days <- levels(flights$Day)
+flights$Day <- factor(flights$Day, levels=days[c(2,6,7,5,1,3,4)])
+
+summary(flights$Day)
+#   Monday   Tuesday Wednesday  Thursday    Friday  Saturday    Sunday 
+#      368       360       459       460       456       248       336 
+```
+
+3. Create a new variable called 'Weekend' which has value TRUE for Saturdays and Sundays and FALSE otherwise. 
+
+```{r}
+# create new variable Weekend
+flights$Weekend <- flights$Day %in% c("Saturday", "Sunday")
+
+summary(flights$Weekend)
+#   Mode   FALSE    TRUE    NA's 
+#logical    2103     584       0 
+```
+
+4. Determine how many flights arrived in Des Moines on average each day of the week. 
+
+```{r}
+# idea 1:
+table(subset(flights, Dest=="DSM")$Day) # overall number of flights by day of week
+
+#   Monday   Tuesday Wednesday  Thursday    Friday  Saturday    Sunday 
+#      184       180       230       230       228       124       168 
+# problem: how many Mondays, Tuesdays, are there in October 2008?
+
+require(lubridate)
+octs <- data.frame( date = ymd(paste("2008/10/",1:31, sep="")))
+octs$day = wday(octs$date, label=TRUE)
+table(octs$day)
+
+table(subset(flights, Dest=="DSM")$Day)/c(4,4,5,5,5,4,4)
+
+# idea 2: 
+require(dplyr)
+require(lubridate)
+flights %>% filter(Dest == "DSM") %>% group_by(DayofMonth) %>% summarise(
+  day = Day[1],
+  n = n()
+) %>% group_by(day) %>% summarize(avg = mean(n), n = n())
+```
+
+6. How many flights were scheduled to go to Denver (DEN)? What percentage of flights goes to Denver? 
+
+```{r}
+nrow(subset(flights, Dest=='DEN'))
+nrow(subset(flights, Dest=='DEN'))/nrow(subset(flights, Dest != 'DSM'))*100
+```
+
+7. Where do most flights arriving in Des Moines come from? (use IATA code) </p>
+
+```{r}
+sort(table(flights$Origin), decreasing=T)[2]
+```
+
+8. Plot boxplots of arrival delays by originating airports. Order boxplots according to increasing median arrival delay. </p>
+
+```{r}
+library(ggplot2)
+flights %>% filter(Dest =="DSM") %>%
+ggplot(	aes(x = reorder(factor(Origin), ArrDelay, na.rm=T), y = ArrDelay)) + geom_boxplot()
+```
+
+9. Using dplyr, determine for flights leaving DSM for each hour of the day 
+
+  - the number of flights scheduled to leave, 
+  - the percentage of flights departing late (FAA considers flights late, if they are 15 minutes or more behind the scheduled time), 
+  - the average departure delay, and 
+  - the top 3 destinations.
+
+Draw a scatterplot of average departure delay by scheduled hour of departure. Color points by top destination, adjust point size to reflect the number of flights for each hour. 
+```{r}
+dep.summary <- flights %>% filter(Origin == 'DSM') %>% mutate(hour = CRSDepTime%/%100) %>% group_by(hour) %>%
+  summarise(
+    count = n(),
+    pct.delayed = sum(DepDelay>15, na.rm=TRUE)/n()*100,
+    avg.delay = mean(DepDelay, na.rm=T),
+    top.Dest.1=names(sort(table(Dest), decreasing=T))[1],
+    top.Dest.2=names(sort(table(Dest), decreasing=T))[2],
+    top.Dest.3=names(sort(table(Dest), decreasing=T))[3] 
+  )
+
+dep.summary %>% 
+  ggplot(aes(x = hour, avg.delay, colour = top.Dest.1, size = count)) + geom_point()
+```
+
