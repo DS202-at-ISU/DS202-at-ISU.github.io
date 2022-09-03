@@ -1,7 +1,7 @@
 ---
 title: 'Homework #1'
 author: "Your Name"
-date: "1/10/2018"
+date: "09/13/22"
 output: html_document
 ---
 
@@ -9,15 +9,39 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## An example of Data Science
-
-1. Download the RMarkdown file with these homework instructions to use as a template for your work.
-Make sure to replace "Your Name" in the YAML with your name.
-2. Write a paragraph (~200 words) describing an example of what you consider data science. Write your paragraph in R Markdown. Include at least 
-    a. one link to a chart or an image and 
-    b. at least one itemized or enumerated list.
-
-Note: your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio. Including the link to the image is the tricky part here. Make sure that you don't use any file structure that depends on your computing environment.
+## Asking good questions
 
 
-For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it. 
+Asking good questions is a valuable skill to have - asking questions in an online setting is both easier and harder than asking questions in person: we can prepare to ask a question but we are also expected to prepare.
+The links posted here give some advice on how to ask good questions:
+
+- stackoverflow's [Asking a good question](http://stackoverflow.com/help/how-to-ask)
+
+- R's [Posting guidelines](https://www.r-project.org/posting-guide.html)
+
+- [minimal complete verifiable example](https://stackoverflow.com/help/mcve), [minimal reproducible example](https://www.tidyverse.org/help/)
+
+
+Follow these links and read through the advice given, then
+
+0. **Download the (R)Markdown file with these homework instructions to use as a template for your work.
+Make sure to replace "Your Name" in the YAML with your name.**
+
+
+1. **Pick one question from stackoverflow and identify a minimum of three way(s) in which it is not asked well.**
+
+2. **(1 point) Which question did you pick (link to it).** 
+
+3. **(1 point) Take a screenshot (or take a picture with your phone). Make sure to place the image in the same folder as your Rmarkdown file  and include it in your (R)markdown file.**
+
+3. **(3 points) Relate the readings to how the question is phrased: for that, write a paragraph on what a good question should do and then state what the stackoverflow question does. Identify at least three shortcomings.**
+
+4. **(3 points) Re-phrase the question to make it better. You can use placeholders for information that is not given in the original question, e.g. "version" or "platform".**
+ 
+
+Note: (2 points) make sure that your submission is fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio. Including any links to files is the tricky part here. Make sure that you don't use any file structure that depends on your computing environment.
+
+
+For the submission: submit a zipped file  solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it. 
+
+
