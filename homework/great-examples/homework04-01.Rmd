@@ -1,0 +1,124 @@
+---
+title: 'Homework #4'
+date: "10/18/2022"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Chick weights
+
+The `ChickWeight` data set is part of the base package `datasets`. See `?ChickWeight` for details on the data. For all of the questions use `dplyr` functions whenever possible.
+
+1.  Download the RMarkdown file with these homework instructions to use as a template for your work. Make sure to replace "Your Name" in the YAML with your name. To get full points, show your R code (in a code chunk) and write answers to the questions.
+
+```{r libraries, include=FALSE}
+library(dplyr)
+library(ggplot2)
+#data("ChickWeight")
+
+# remove the comments to load all the needed data and tools for this .rmd file
+```
+
+2.  (1 pt) What variables are part of the dataset?
+
+-   There are 4 variables in the data "ChickWeight". The first variable is weight, this measures the weight of each chick and is a numerical input. The second variable is time, this numeric input tracks how many days old the chick is when the it was weighed. The third variable is a number identifier, identifying which chick is being weighted. Each chick was given a number, 1 - 50 to track their progress. The fourth variable is a factor variable given to each chick to track which diet the chick is receiving. Their are 4 different diets that the group of chicks were subjected to.
+
+```{r Question 2, include=TRUE}
+head(ChickWeight)
+dim(ChickWeight)
+?ChickWeight
+#View(ChickWeight)
+```
+
+3.  (2 pts) Get a frequency breakdown of the number of chicks, their average weight and the standard deviation of the weights in each of the diets at the start of the study.
+
+-   The data was first filtered by time because at the start of the diet the time was eaual to 0 days. After this the remaining data was grouped by diet type. From their a count of the number of chicks was conducted, an average weight for those chicks was calculated, and the standard deviation of the chicks was also calculated. Below is a breakdown of the data. Diet 1 contains 20 chicks with an average weight of 41.4 grams, and a standard deviation of .9947 grams. Diet 2 contains 10 chicks with an average weight of 40.7 grams, and a standard deviation of 1.4944 grams. Diet 3 contains 10 chicks with an average weight of 40.8 grams and a standard deviation of 1.0328 grams. Finally, diet 4 contains 10 chicks with an averge weight of 41 grams, and a standard deviation of 1.0541 grams.
+
+```{r Question 3, include=TRUE}
+diets_start <- filter(ChickWeight,Time==0) %>% 
+  group_by(Diet) %>%
+  summarize(
+    frequency = n(),
+    average_weight = mean(weight,na.rm=TRUE),
+    sd_weight = sd(weight,na.rm=TRUE)
+  )
+head(diets_start)
+```
+
+0.5 pts of extra credit: construct a ggplot that shows average weights by diet with an interval (shown as a line) of +- the standard deviation around the averages.
+
+```{r Extra Credit, include=TRUE}
+  
+ggplot(diets_start,aes(x=Diet,y=average_weight,color=Diet))+geom_linerange(aes(ymin=average_weight-sd_weight,ymax=average_weight+sd_weight))+geom_point()
+```
+
+4.  (2.5 pts) Each chick should have twelve weight measurements. Use the dplyr package to identify how many chicks have a complete set of weight measurements and how many measurements there are on average in the incomplete cases. Extract a subset of the data for all chicks with complete information and name the data set `complete`. (Hint: you might want to use mutate to introduce a helper variable consisting of the number of observations)
+
+-   45 chicks have a complete data set of 12 observations, while 5 chicks have incomplete data sets. The average number of observations for the incomplete observations per chick is 7.6 as seen below.
+
+```{r Question 4, include=TRUE}
+chicken <- ChickWeight %>% 
+  group_by(Chick) %>% mutate(
+    obs = n()
+)
+
+complete <- filter(chicken,obs==12)
+incomplete <- filter(chicken,obs<12)
+
+number_complete <- complete %>%
+  group_by(Chick) %>%
+  summarize(observation = n())
+
+number_incomplete <- incomplete %>%
+  group_by(Chick) %>% 
+  summarize(observations = n())
+ 
+observations_incomplete <- sum(number_incomplete['observations'])
+average <- observations_incomplete/5
+
+n_c <- number_complete %>%
+  summarize(complete_observations = n())
+
+n_i <- number_incomplete %>%
+  summarize(incomplete_observations = n())
+
+answer <- n_c %>% mutate(
+  n_i,
+  total_incomplete = sum(number_incomplete['observations']),
+  average_incomplete = observations_incomplete/5
+)
+
+head(answer)
+```
+
+5.  (.5 pt) In the complete data set introduce a new variable that measures the current weight difference compared to day 0. Name this variable `weightgain`. (Hint: use mutate)
+
+```{r Question 5, include = TRUE}
+complete <- complete %>% 
+  mutate(
+  weightgain = weight-weight[Time==0]
+)
+```
+
+6.  (2.5 pts) Use ggplot2 to create side-by-side boxplots of `weightgain` by `Diet` for day 21. Describe the relationship in 2-3 sentences. Change the order of the categories in the Diet variable such that the boxplots are ordered by median `weightgain`.
+
+-   From the box plots below there are a few details that we can gather. The first and arguably most important detail is the median weight gain of the chicks based segregated by the diet they were fed. From this we can tell that diet 3 had the highest median with diet 4 having the second highest, and then diet 2 had the 3 highest, and diet 1 had the lowest median weight gain. This would indicate that diet 3 be the preferred diet for chicks if the goal is to have them grow the fastest. This may be true but additional data should be collected because diet 4 also has a fairly high median wieght gain but also has few and less extreme lower weight gain outliers, signalling this may be a more stable diet.
+
+```{r Question 6, include=TRUE}
+day21 <- filter(complete,Time==21)
+day21 <- day21 %>% 
+  group_by(Diet) %>% mutate(
+  weightgain_median = median(weightgain)
+)
+ggplot(day21,aes(x=Diet,y=weightgain,color=Diet))+geom_boxplot()
+ggplot(day21,aes(x=reorder(Diet,weightgain_median),y=weightgain,color=Diet))+geom_boxplot()
+```
+
+Note: 1.5 pts your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio.
+
+For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it.
