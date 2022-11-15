@@ -1,0 +1,100 @@
+---
+title: 'Homework #8'
+author: "Your Name"
+date: "11/29/2022"
+output: html_document
+---
+---
+title: 'Homework #8'
+author: "Your Name"
+date: "11/29/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is a homework for up to 13 pts of extra credit. 
+
+## Whose data is it?
+
+Ownership of anything published on the WWW is regulated by licenses. While sharing of materials and open access disseminates materials quickly, it does not mean that just because we can openly access something, it automatically belongs to us.
+
+Most relevant to us are two sets of licenses: software licenses and data licenses.
+Dealing with licenses is often tricky because of all the legal language.
+
+For our use, we essentially need to answer four main questions: 
+
+- Do authors want to be cited (**attributed**) for their work?
+
+- Are the authors fine with other people modifying their work and then sharing the modified work? (Are **derivatives** allowed?)
+
+- Are the authors fine with other people making a profit from those derivations? (Is **commercial use** allowed?)
+
+- Who is responsible if the software does not do what it promises to do? (Are authors **liable**?)
+
+
+**Software licenses**
+
+Read through the chapter on [licenses for software](https://r-pkgs.org/license.html) from Hadley Wickham's book on R packages. 
+
+![](https://d3i71xaburhd42.cloudfront.net/0625aada49caa66436ee6e3fac88542678100d0e/14-Table2-1.png)
+Published as table 2 in Lin, Yi-Hsuan, Tung-Mei Ko, Tyng-Ruey Chuang and Kwei-Jay Lin. "Open Source Licenses and the Creative Commons Framework: License Selection and Comparison." J. Inf. Sci. Eng. 22 (2006): 1-17.
+
+
+
+**Data licenses:** are mostly dealt with using the creative commons license family. 
+
+[Research Outreach](https://researchoutreach.org/) has provided a relatively easy to understand [summary of the relevant aspects of data licenses](https://researchoutreach.org/articles/thought-leaders/license-to-share-how-the-creative-commons-licensing-system-encourages-the-remixing-and-reuse-of-published-materials/).
+
+
+![Creative Commons licenses for data (by Research Outreach)](https://researchoutreach.org/wp-content/uploads/2018/11/Creative-Comms-Licenses.jpg)
+
+
+
+1. Download the RMarkdown file with these homework instructions to use as a template for your work.
+Make sure to replace "Your Name" in the YAML with your name.
+2. (2 points) Under what license is the package `ggplot2` published? What does that mean for the `diamonds` data set?
+3. A simple search at kaggle for `diamonds` produces about 1,500 results: https://www.kaggle.com/search?q=diamonds
+
+    1. (5 points) Pick one of the links, download the data and write a script in R that allows you to compare the downloaded data to the diamonds data set in the `ggplot2` package. What is your conclusion? Under what license is the data published on kaggle?
+    2. (3 points) Repeat the process with a second of the diamonds data sets on kaggle.
+
+```{r}
+# Your url: 
+# License for this data: 
+# script to compare data:
+
+
+# Your url: 
+# License for this data: 
+# script to compare data:
+
+
+
+```
+
+3. (2 points) Identify the license under which the [Iowa Liquor Sales data](https://data.iowa.gov/Sales-Distribution/Iowa-Liquor-Sales/m3tr-qhgy) is published.  What does it mean for us?
+
+
+
+4. (3 points)  Why do you think are there so many datasets on kaggle with questionable provenance?
+
+
+Note: your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio. 
+
+
+For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it. 
+
+<!-- 
+https://www.kaggle.com/datasets/shivam2503/diamonds
+https://www.kaggle.com/datasets/nancyalaswad90/diamonds-prices
+https://www.kaggle.com/code/fuzzywizard/diamonds-in-depth-analysis
+https://www.kaggle.com/code/karnikakapoor/diamond-price-prediction/data
+https://www.kaggle.com/datasets/shivam2503/diamonds
+https://www.kaggle.com/code/aniketdogra/diamonds-analysis-and-prediction
+https://www.kaggle.com/code/rasikagurav/diamond-dataset/data
+https://www.kaggle.com/code/vigi3093/eda-on-diamond-dataset/data
+https://www.kaggle.com/code/heeraldedhia/regression-on-diamonds-dataset-95-score/data
+-->
