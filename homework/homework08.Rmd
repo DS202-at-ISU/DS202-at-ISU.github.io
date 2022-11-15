@@ -15,7 +15,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-This is a homework for up to 13 pts of extra credit. 
+This is a homework for up to 15 pts of extra credit. 
 
 ## Whose data is it?
 
