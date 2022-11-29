@@ -1,0 +1,49 @@
+---
+title: 'Homework #9'
+author: "Your Name"
+date: "12/6/2022"
+output: html_document
+---
+---
+title: 'Homework #9'
+author: "Your Name"
+date: "12/06/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is a homework for up to 12 pts of extra credit. 
+
+## Scraping data
+
+We are working a bit more on the problem we found in homework 8: rampant use of data on kaggle.com without attribution.
+
+1. Download the RMarkdown file with these homework instructions to use as a template for your work.
+Make sure to replace "Your Name" in the YAML with your name.
+2. (4 points) Write a function `data_link_scraper` that scrapes the resulting links from a kaggle search, such as https://www.kaggle.com/search?q=diamonds.<br>
+Can you get all links?  Hint: see `?rvest::session` and `?rvest::session_follow_link`.
+3. (4 points) Write a function `kaggle_evaluate` that takes a link to a dataset on kaggle, identifies the data link and other relevant pieces of information (author, contact, license).
+4. (4 points) Write a function `same_data` that
+downloads a data set from kaggle and evaluates it againts the diamonds data - use the ideas from the last homework to check if the data are the same (solution will be posted).
+
+
+
+Note: your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio. 
+
+
+For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it. 
+
+<!-- 
+https://www.kaggle.com/datasets/shivam2503/diamonds
+https://www.kaggle.com/datasets/nancyalaswad90/diamonds-prices
+https://www.kaggle.com/code/fuzzywizard/diamonds-in-depth-analysis
+https://www.kaggle.com/code/karnikakapoor/diamond-price-prediction/data
+https://www.kaggle.com/datasets/shivam2503/diamonds
+https://www.kaggle.com/code/aniketdogra/diamonds-analysis-and-prediction
+https://www.kaggle.com/code/rasikagurav/diamond-dataset/data
+https://www.kaggle.com/code/vigi3093/eda-on-diamond-dataset/data
+https://www.kaggle.com/code/heeraldedhia/regression-on-diamonds-dataset-95-score/data
+-->
