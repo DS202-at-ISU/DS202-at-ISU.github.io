@@ -16,11 +16,11 @@ fbi %>% filter(year %in% c(2010, 2020))  %>%
   geom_point()
 
 fbi %>% filter(year %in% c(2010, 2020))  %>% 
-  filter(type=="motor-vehicle-theft") %>% 
+  filter(type=="motor_vehicle_theft") %>% 
   ggplot(
     aes(x = state_abbr, 
         y = count/population*90000, 
-        colour = year)) +
+        colour = factor(year))) +
   geom_point()
 
 

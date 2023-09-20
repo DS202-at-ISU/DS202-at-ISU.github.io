@@ -106,4 +106,9 @@ fbiwide %>% filter(year == 2011,
                    motor_vehicle_theft > robbery) %>% 
   nrow()
 
+fbiwide %>% filter(year == 2011, 
+                   motor_vehicle_theft > robbery) %>% 
+  select(state, year, motor_vehicle_theft, robbery) %>% 
+  pull(state) %>% 
+  length()
 
