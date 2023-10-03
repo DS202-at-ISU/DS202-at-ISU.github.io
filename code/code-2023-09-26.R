@@ -140,10 +140,12 @@ mean_nhappy_summary %>%
   ggplot(aes(x = year, y = mean_nhappy)) +
   geom_line()
 
+# or, we can draw a boxplot for each year
+# please note that this is not good visualization
 happy %>% ggplot(aes(x = as.factor(year), y = nhappy)) +
   geom_boxplot()
 
-
+# include the total average into the plot
 mean_nhappy_summary$sex <- 'combined'
 happy %>% 
   group_by(year, sex) %>% 
@@ -155,7 +157,8 @@ happy %>%
   geom_line(data = mean_nhappy_summary) +
   scale_color_manual(values = c('black', 'red', 'blue'))
 
-
+# if you are not confident about the result of the code
+# just run part of them then save and check the results
 happy_year_sex <- happy %>% 
   group_by(year, sex) %>% 
   summarize(
@@ -166,7 +169,8 @@ happy_year_sex %>%
   geom_line() +
   geom_line(data = mean_nhappy_summary)
 
-
+# this is just showing you that aesthetic mappings can be 
+# specified in geom_line()
 happy_year_sex %>% 
   ggplot() +
   geom_line(aes(x = year, y = mean_nhappy, color = sex)) +
