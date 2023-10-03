@@ -115,6 +115,13 @@ data('happy')
 dim(happy)
 ?happy
 
+happy %>% 
+  ggplot(aes(x = happy, color = health, fill = degree)) +
+  geom_bar()
+
+happy %>% 
+  ggplot(aes(x = happy)) +
+  geom_bar()
 
 # Plot the variable happy. Introduce a new variable nhappy that has values 1 for not too happy, 2 for pretty happy, 3 for very happy and NA for missing values. There are multiple ways to get to that. Avoid for loops.
 happy$nhappy <- as.numeric(happy$happy)
@@ -133,6 +140,10 @@ mean_nhappy_summary %>%
   ggplot(aes(x = year, y = mean_nhappy)) +
   geom_line()
 
+happy %>% ggplot(aes(x = as.factor(year), y = nhappy)) +
+  geom_boxplot()
+
+
 mean_nhappy_summary$sex <- 'combined'
 happy %>% 
   group_by(year, sex) %>% 
@@ -143,6 +154,26 @@ happy %>%
   geom_line() +
   geom_line(data = mean_nhappy_summary) +
   scale_color_manual(values = c('black', 'red', 'blue'))
+
+
+happy_year_sex <- happy %>% 
+  group_by(year, sex) %>% 
+  summarize(
+    mean_nhappy = mean(nhappy, na.rm = TRUE)
+  )
+happy_year_sex %>% 
+  ggplot(aes(x = year, y = mean_nhappy, color = sex)) +
+  geom_line() +
+  geom_line(data = mean_nhappy_summary)
+
+
+happy_year_sex %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = mean_nhappy, color = sex)) +
+  geom_line(data = mean_nhappy_summary, 
+            aes(x = year, y = mean_nhappy, color = sex)) +
+  geom_histogram(aes(x = year))
+
 
 # how does average happiness change over the course of a life time? Is this relationship different for men and women? Draw plots.
 # use age instead of year
@@ -166,11 +197,24 @@ happy %>%
   geom_line()
 
 
-happy %>% 
+happy_partyid <- happy %>% 
   group_by(partyid) %>% 
   summarise(
     avg_happiness = mean(nhappy, na.rm = TRUE)
   )
+
+happy_partyid %>% ggplot() +
+  geom_bar(aes(x = partyid, weight = avg_happiness))
+
+happy_partyid %>% 
+  ggplot(aes(x = partyid, y = avg_happiness)) +
+  geom_col() +
+  geom_line(aes(x = as.numeric(partyid)))
+
+
+happy_partyid %>% ggplot() +
+  geom_bar(aes(x = partyid))
+
 
 happy %>% 
   group_by(finrela) %>% 
