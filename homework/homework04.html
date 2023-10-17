@@ -373,7 +373,9 @@ chunk) and write answers to the questions.</li>
 average weight and the standard deviation of the weights in each of the
 diets at the start of the study. <br> 0.5 pts of extra credit: construct
 a ggplot that shows average weights by diet with an interval (shown as a
-line) of +- the standard deviation around the averages.</li>
+line) of +- the standard deviation around the averages. (Hint: read this
+article regarding <a href="http://www.sthda.com/english/wiki/ggplot2-error-bars-quick-start-guide-r-software-and-data-visualization">ggplot
+error bars</a>)</li>
 <li>(2.5 pts) Each chick should have twelve weight measurements. Use the
 dplyr package to identify how many chicks have a complete set of weight
 measurements and how many measurements there are on average in the
@@ -383,7 +385,11 @@ you might want to use mutate to introduce a helper variable consisting
 of the number of observations)</li>
 <li>(.5 pt) In the complete data set introduce a new variable that
 measures the current weight difference compared to day 0. Name this
-variable <code>weightgain</code>. (Hint: use mutate)</li>
+variable <code>weightgain</code>. (Hint: use mutate and
+<code>?mutate</code> to check the parameter <code>.by</code>. This
+parameter can create a temporary <code>group_by</code> so that we can do
+calculation in each subgroup, i.e. for each combination of chick and
+diet, <code>weight - min(weight)</code>)</li>
 <li>(2.5 pts) Use ggplot2 to create side-by-side boxplots of
 <code>weightgain</code> by <code>Diet</code> for day 21. Describe the
 relationship in 2-3 sentences. Change the order of the categories in the

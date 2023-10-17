@@ -9,6 +9,16 @@ deaths <- av %>%
                values_to = "Died") %>% 
   select(URL, Name.Alias, Time, Died)
 
+av %>% 
+  pivot_longer(starts_with("Death"),
+               names_to = "Time",
+               values_to = "Died") -> tt
+tt <- av %>% 
+  pivot_longer(starts_with("Death"),
+               names_to = "Time",
+               values_to = "Died")
+nrow(tt)
+
 maxdeaths <- deaths %>% 
   mutate(
     Time = parse_number(Time)
@@ -18,7 +28,7 @@ maxdeaths <- deaths %>%
   summarise(
     Time = max(Time),
     .groups = 'drop'
-  )
+  ) 
 
 maxdeaths %>% 
   # ungroup() %>% 
@@ -72,45 +82,57 @@ maxreturns %>%
   pull(n) %>% sum()
 
 
-
-
-
-maxdeaths <- av %>% 
-  pivot_longer(starts_with("Death"),
-               names_to = "Time",
-               values_to = "Died") %>% 
-  select(Name.Alias, Time, Died) %>% 
-  mutate(
-    Time = parse_number(Time)
-  ) %>% 
-  filter(Died != '') %>% 
-  group_by(Name.Alias, Died) %>% 
-  summarise(
-    Time = max(Time)
-  )
-
-
 ####
-url <- "https://github.com/ds202-at-ISU/materials/blob/master/03_tidyverse/data/ames-liquor.rds?raw=TRUE"
-download.file(url, "data/ames-liquor.rds", mode="wb")
+# url <- "https://github.com/ds202-at-ISU/materials/blob/master/03_tidyverse/data/ames-liquor.rds?raw=TRUE"
+# download.file(url, "data/ames-liquor.rds", mode="wb")
 ames <- readRDS("data/ames-liquor.rds")
 
 ames$Date %>% head()
 
-ames$`Store Location` %>% head()
-ames$`Store Location` %>% head() %>% parse_number()
+ames %>% 
+  head() %>% 
+  separate(
+    Date, 
+    into = c("month", "day", "year")
+  ) %>% 
+  select(month, day, year)
 
-ames %>% head() %>% 
+ames$`Store Location` %>% head()
+
+ames$`Store Location` %>% 
+  head() %>% 
+  parse_number()
+
+ames <- ames %>% 
   separate(`Store Location`, 
            into = c("prefix", "lat", 'long'),
            sep = ' ') %>% 
-  select(prefix, lat, long) %>% 
+  # select(prefix, lat, long) %>% 
   mutate(
     lat = parse_number(lat),
     long = parse_number(long)
   )
 
+# What is the total amount spent on Liquor Sales?
+str(ames)
 
+total_sales <- ames$`Sale (Dollars)` %>% 
+  sum(na.rm = TRUE)
+total_sales
+
+# What is the single largest sale 
+# (in volume/in dollar amount)?
+max(ames$`Sale (Dollars)`, na.rm = TRUE)
+max(ames$`Volume Sold (Gallons)`, na.rm = TRUE)
+
+which.max(ames$`Sale (Dollars)`)
+which.max(ames$`Volume Sold (Gallons)`)
+
+# Plot geographic longitude and latitude. 
+# Where are liquor sales in Ames happening?
+ames %>% 
+  ggplot(aes(x = lat, y = long)) +
+  geom_point()
 
 
 
