@@ -1,7 +1,6 @@
 ---
 title: "Sample Midterm DS 202"
-author: "Heike Hofmann"
-date: "March 27, 2018"
+date: "10/19/2023"
 output: html_document
 ---
 

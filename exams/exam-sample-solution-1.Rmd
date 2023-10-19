@@ -57,27 +57,26 @@ For each game, the variable `points` keeps track of the number of points attempt
 scores <- pbp %>% group_by(game_id, team) %>% 
   filter(result=="made") %>%
   summarise(
-    score = sum(points)
-  ) %>% 
-  ungroup(team) %>%  
-  mutate(
-    team = reorder(factor(team), score, mean, na.rm=TRUE)
-  ) 
+    score = sum(points),
+    .groups = 'drop'
+  )
 
 pbp %>% filter(event_type=="end of period", period==4) %>% select(home_score, away_score, game_id)
 
 scores %>%
-  ggplot(aes(team, score)) + geom_point() + coord_flip()
+  ggplot(aes(reorder(team, score, median), score)) + geom_point() + coord_flip()
 
-winners <- scores %>% group_by(game_id) %>%
-  mutate(winner = team[which.max(score)], 
+winners <- scores %>% 
+  mutate(.by = game_id,
+         winner = team[which.max(score)], 
          loser = team[which.min(score)])
 
 players <- pbp %>% group_by(game_id, team, player) %>% 
   filter(result=="made") %>%
   summarise(
-    score = sum(points)
-  ) %>% ungroup(player) %>%
+    score = sum(points),
+    .groups = 'drop'
+  ) %>%
   group_by(game_id, team) %>%
   mutate(
     mvp = rank(-score)
@@ -97,6 +96,13 @@ For game number  `21700003` plot the geographic location of each play on the cou
 ```{r}
 pbp %>% group_by(event_type, is.na(converted_x), is.na(converted_y)) %>% tally()
 # shots and mises have geographic information
+
+# an alternative solution
+pbp %>% group_by(event_type) %>% 
+  summarise(
+    x_missing = sum(is.na(converted_x)),
+    y_missing = sum(is.na(converted_y))
+  )
 
 pbp %>% filter(game_id==21700003) %>% 
   ggplot(aes(x = converted_x, y = converted_y, colour=team, shape=result)) + 
@@ -131,9 +137,9 @@ Plot the timeline (`time_played`) of events (`event_type`) for game with the id 
 library(lubridate)
 pbp <- pbp %>% separate(elapsed, into=c("hour", "minute", "second"), sep=":") %>%
   mutate(
-  elapsed = as.numeric(minute)*60+as.numeric(second),
-  time_played = elapsed + 12*60*(period-1)
-)
+    elapsed = as.numeric(minute)*60+as.numeric(second),
+    time_played = elapsed + 12*60*(period-1)
+  )
 pbp %>% 
   filter(game_id=="21700002") %>%
   ggplot(aes(x = elapsed, y = event_type,  colour=team)) + 
@@ -152,12 +158,12 @@ Draw side-by-side boxplots of the number of players by position. Comment.
 
 
 ```{r}
-players <- pbp %>% gather(teamposition, player, a1:h5) %>%
+players <- pbp %>% pivot_longer(a1:h5, names_to = "teamposition", values_to = "position_player") %>%
   mutate(
     position = parse_number(teamposition)
   ) %>%
   group_by(position, game_id) %>%
-  summarise(num_players = length(unique(player)))
+  summarise(num_players = length(unique(position_player)))
 
 players %>% ggplot(aes(x = factor(position), y=num_players))  +
   geom_boxplot() 

@@ -1,6 +1,6 @@
 ---
 title: "DS 202: Sample Exam"
-date: "3/27/2018"
+date: "10/19/2023"
 output: html_document
 ---
 
@@ -17,7 +17,7 @@ Here, we are using play-by-play data on all NBA games on two days in Oct 2017.
 
 ## Question #1: First Overview
 
-Read the data from [sample-combined-pbp-stats.csv](https://raw.githubusercontent.com/DS202-at-ISU/DS202-at-ISU.github.io/master/exams/sample-combined-pbp-stats.csv) without downloading the file locally. 
+Read the data from [sample-combined-pbp-stats.csv](https://raw.githubusercontent.com/DS202-at-ISU/DS202-at-ISU.github.io/master/exams/sample-combined-pbp-stats.csv) without downloading the file locally. (Hint: `?read.csv`)
 Each line of the file describes one play in a game. 
 
 - How many rows and columns does the data have? What are the variables called?
@@ -42,7 +42,7 @@ For each game, the variable `points` keeps track of the number of points attempt
 
 - In a second step, use the scores to identify winning and losing teams of each game (Hint: use dplyr again and remember what `which.max` and `which.min` are doing). 
 
-- `player` keeps track of which player makes a shot. For each game,  identify which player in each team scored the most points. 
+- `player` keeps track of which player makes a shot. For each game,  identify which player in each team scored the most points. (Hint: `?rank`)
 
 ```{r}
 # write your code here
@@ -65,7 +65,7 @@ For game number  `21700003` plot the geographic location of each play on the cou
 
 Is there any evidence that shots closer to the basket are successful more often? For that,
 - introduce a new variable `d` into the data that captures the distance of a player from the basket (basket is in [0,0] for variables `original_x` and `original_y`).
-- draw side-by-side boxplots of distance by result and team (using ggplot2). Interpret.
+- draw side-by-side boxplots of distance by result and team (using ggplot2). Interpret. (Hint: you can put either `result` or `team` on the x-axis and the remaining variable into facet)
 
 ```{r}
 # write your code here
@@ -78,7 +78,7 @@ Is there any evidence that shots closer to the basket are successful more often?
 The variable `elapsed` is recorded in hour-minute-second format. Convert the information into seconds (hint: you could introduce helper variables for the conversion).
 The `elapsed` time variable starts over in each period (a period has 12 mins). Introduce a new variable called `time_played` that keeps track of the time (in seconds) from the beginning of a game to the end.
 
-Plot the timeline (`time_played`) of events (`event_type`) for game with the id `21700002` in a scatterplot. Colour by team. Comment on the result.
+Plot the timeline (`time_played`) of events (`event_type`) for game with the id `21700002` in a scatterplot. Colour by team. Make Facet by `period`. Comment on the result.
 
 ```{r}
 # write your code here
