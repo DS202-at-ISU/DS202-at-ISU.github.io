@@ -13,11 +13,17 @@ A dataset containing all worldwide earth quakes  for a time frame of 30 days is 
 
 You can find the accompanying codebook at <a href="http://earthquake.usgs.gov/earthquakes/feed/v1.0/csv.php">US Geology Survey</a> (you should be able to answer all questions in this exam without the codebook). 
 
+Update: the link to the csv file above is not valid anymore. Please use the following code to load the data
+
+```{r}
+eq <- read.csv("https://raw.githubusercontent.com/DS202-at-ISU/DS202-at-ISU.github.io/master/exams/earthquakes.csv")
+```
+
 1. Load the data into R. What is the time frame under consideration? How many earthquakes were there?
 When and where was the strongest earthquake? What was its magnitude?
 
 ```{r}
-eq <- read.csv("http://www.hofroe.net/data/earthquakes.csv")
+eq <- read.csv("https://raw.githubusercontent.com/DS202-at-ISU/DS202-at-ISU.github.io/master/exams/earthquakes.csv")
 
 # time frame:
 eq$Date <- lubridate::ymd(eq$Date)
@@ -41,6 +47,7 @@ max(eq$Magnitude)
 2. The variable 'Country' contains country names or states (in the case of the US). California is listed both as 'CA' and as 'California'. Convert all elements in the variable from 'CA' to "California'. 
 
 ```{r}
+eq$Country <- factor(eq$Country)
 levels(eq$Country)[11] <- "California"
 sort(table(eq$Country), decreasing=TRUE)[1:5]
 #            California                 Alaska British Virgin Islands 
@@ -78,8 +85,8 @@ eq %>% mutate(
 ```
 
 5.	Draw a histogram of magnitude of earthquakes - make sure to not get a warning message.
-	Describe the shape of the density. <br>
-	Use the histogram to pick a suitable cutoff between 'small' and 'large' earthquakes. 
+Describe the shape of the density. <br>
+Use the histogram to pick a suitable cutoff between 'small' and 'large' earthquakes. 
 ```{r}
 library(ggplot2)
 
@@ -110,13 +117,13 @@ worldmap + geom_point(aes(x = Longitude, y = Latitude, colour = size, group=1), 
 - their average magnitude, 
 - the name of the country/state in which most of them happened that day. 
 
-  Based on the summary data, draw a single chart that incorporates all of the above information.
+Based on the summary data, draw a single chart that incorporates all of the above information.
 
 ```{r}
 eq.stats <- eq %>% group_by(Date) %>% summarize(
-	n = n(),
-	Magnitude = mean(Magnitude),
-	Country = names(sort(table(Country), decreasing=TRUE))[1]
+  n = n(),
+  Magnitude = mean(Magnitude),
+  Country = names(sort(table(Country), decreasing=TRUE))[1]
 )
 
 eq.stats %>% 

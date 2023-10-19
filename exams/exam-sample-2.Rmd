@@ -13,6 +13,12 @@ A dataset containing all worldwide earth quakes  for a time frame of 30 days is 
 
 You can find the accompanying codebook at <a href="http://earthquake.usgs.gov/earthquakes/feed/v1.0/csv.php">US Geology Survey</a> (you should be able to answer all questions in this exam without the codebook). 
 
+Update: the link to the csv file above is not valid anymore. Please use the following code to load the data
+
+```{r}
+eq <- read.csv("https://raw.githubusercontent.com/DS202-at-ISU/DS202-at-ISU.github.io/master/exams/earthquakes.csv")
+```
+
 1. Load the data into R. What is the time frame under consideration? How many earthquakes were there?
 When and where was the strongest earthquake? What was its magnitude?
 

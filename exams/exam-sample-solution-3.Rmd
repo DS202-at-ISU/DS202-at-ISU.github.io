@@ -14,10 +14,16 @@ Work on questions in R, make sure to keep a copy of your R code - you will be as
 Data on all flights in and out of Des Moines (DSM) for October 2008 are available at <a href="http://www.hofroe.net/data/dsm-flights.csv">http://www.hofroe.net/data/dsm-flights.csv</a>.<br>
 See <a href="http://stat-computing.org/dataexpo/2009/the-data.html">http://stat-computing.org/dataexpo/2009/the-data.html</a> for a description of the variables.
 
+Update: the link to the csv file above is not valid anymore. Please use the following code to load the data
+
+```{r}
+flights <- read.csv("https://raw.githubusercontent.com/DS202-at-ISU/DS202-at-ISU.github.io/master/exams/dsm-flights.csv")
+```
+
 1. Load the flights data into R. <br>
 		Determine, which flight was delayed the most on arrival. Report its row number, where it started, and by how much the flight was delayed on departure.  </p>
 ```{r}
-flights <- read.csv("http://www.hofroe.net/data/dsm-flights.csv")
+flights <- read.csv("https://raw.githubusercontent.com/DS202-at-ISU/DS202-at-ISU.github.io/master/exams/dsm-flights.csv")
 
 # which flight was delayed the worst? - where did the flight start? 
 # was it delayed when departing? 
