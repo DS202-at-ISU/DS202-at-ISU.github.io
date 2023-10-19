@@ -1,0 +1,202 @@
+---
+title: "DS 202: Sample Exam"
+date: "10/19/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# March Madness
+
+
+Basketball is a multimillion dollar sports that fascinates millions of people all year round peaking in March Madness each year.
+Here, we are using play-by-play data on all NBA games on two days in Oct 2017. 
+
+## Question #1: First Overview
+
+Read the data from [sample-combined-pbp-stats.csv](https://raw.githubusercontent.com/DS202-at-ISU/DS202-at-ISU.github.io/master/exams/sample-combined-pbp-stats.csv) without downloading the file locally. (Hint: `?read.csv`)
+Each line of the file describes one play in a game. 
+
+- How many rows and columns does the data have? What are the variables called?
+- each individual game is assigned a unique identifier `game_id`. How many games are recorded in the data and how many plays (number of rows) does a game have on average?
+
+```{r}
+library(tidyverse)
+
+# write your code here
+pbp <- read.csv("https://raw.githubusercontent.com/DS202-at-ISU/DS202-at-ISU.github.io/master/exams/sample-combined-pbp-stats.csv")
+dim(pbp)
+str(pbp)
+
+length(unique(pbp$game_id))
+
+pbp %>% group_by(game_id) %>% 
+  summarise(
+    n = n()
+  )
+
+# recall that tally() is equivalent to summarize() then n()
+# tally() will count the number of rows of each small group
+pbp %>% group_by(game_id) %>% 
+  tally()
+
+# to find the average, there are multiple ways
+
+# first way is to save your result to some variable, then 
+# you can access the column you are interested and calculate
+# the mean
+result_1 <- pbp %>% 
+  group_by(game_id) %>% 
+  tally()
+mean(result_1$n)
+
+# second way is to use pull() and directly access the column 
+# you are interested
+pbp %>% group_by(game_id) %>% 
+  tally() %>% 
+  pull(n) %>% 
+  mean()
+```
+
+
+
+
+## Question #2: Who won? 
+
+For each game, the variable `points` keeps track of the number of points attempted in each play. 
+
+- Use functions from the `dplyr` package to work out the number of points each team scored (check `result`). Filter out all plays that are not associated with any of the teams. 
+
+```{r}
+# after checking the dataset, we know that we should focus
+# on records where `results == 'made'` in order to calculate
+# the points
+
+
+scores <- pbp %>% 
+  filter(result == 'made') %>% 
+  group_by(game_id, team) %>% # for each game and each team
+  summarise(
+    final_score = sum(points, na.rm = TRUE), # calculate the sum of points
+    .groups = 'drop' # remove the grouping structure
+  )
+scores
+```
+
+
+- Compare your scores with the final values of home and away scores (check for `event_type` and `period`)
+
+```{r}
+pbp %>% 
+  filter(event_type == 'end of period', 
+         period == 4) %>% # end of period 4
+  select(away_score, home_score)
+```
+
+
+- Using `ggplot2` plot scores by team. Sort teams by their median scores.
+
+```{r}
+# use either bar chart or scatter plot; they have the same information
+scores %>% 
+  ggplot(aes(x = reorder(team, final_score, median), 
+             y = final_score)) + 
+  geom_bar(stat = 'identity')
+
+scores %>% 
+  ggplot(aes(x = reorder(team, final_score, median), 
+             y = final_score)) + 
+  geom_point()
+```
+
+
+- In a second step, use the scores to identify winning and losing teams of each game (Hint: use dplyr again and remember what `which.max` and `which.min` are doing). 
+
+
+```{r}
+scores %>% 
+  group_by(game_id) %>% # `mutate`(calculate or find the winning and losing team) for each game
+  mutate(
+    winning_team = team[which.max(final_score)],
+    lossing_team = team[which.min(final_score)]
+  )
+```
+
+
+- `player` keeps track of which player makes a shot. For each game,  identify which player in each team scored the most points. (Hint: `?rank`)
+
+```{r}
+# write your code here
+
+# after checking the data: `player` column would be empty if it's not related 
+# to scoring. Remove these rows
+pbp %>% 
+  filter(player != '') %>% 
+  group_by(game_id, team, player) %>% # for each game and each team and each player
+  summarise(
+    player_total_points = sum(points, na.rm = TRUE), # find the total points
+    .groups = 'drop' # although not necessary, remove the grouping structure so that we can do another group_by
+  ) %>% 
+  group_by(game_id, team) %>% # for each game and each team
+  mutate(
+    mvp = rank(-player_total_points) # calculate (not summarize) the rank based on the total points, from top to bottom
+  ) %>% 
+  filter(
+    mvp == 1 # filter to get the first rank
+  )
+
+```
+
+
+
+## Question #3 : On the court
+
+The variables `converted_x` and `converted_y` give the location of the acting player on the court.  Check with the variable `event_type` to see, for which types of play we have geographic information.
+
+For game number  `21700003` plot the geographic location of each play on the court, colour by team and incorporate visually the play's outcome (variable `result`). 
+
+```{r}
+# write your code here
+```
+
+
+## Question #4: Distance hurts?
+
+Is there any evidence that shots closer to the basket are successful more often? For that,
+- introduce a new variable `d` into the data that captures the distance of a player from the basket (basket is in [0,0] for variables `original_x` and `original_y`).
+- draw side-by-side boxplots of distance by result and team (using ggplot2). Interpret. (Hint: you can put either `result` or `team` on the x-axis and the remaining variable into facet)
+
+```{r}
+# write your code here
+```
+
+
+
+## Question #5: Timeline
+
+The variable `elapsed` is recorded in hour-minute-second format. Convert the information into seconds (hint: you could introduce helper variables for the conversion).
+The `elapsed` time variable starts over in each period (a period has 12 mins). Introduce a new variable called `time_played` that keeps track of the time (in seconds) from the beginning of a game to the end.
+
+Plot the timeline (`time_played`) of events (`event_type`) for game with the id `21700002` in a scatterplot. Colour by team. Make Facet by `period`. Comment on the result.
+
+```{r}
+# write your code here
+```
+
+
+## Question #6: Who is playing?
+
+Variables `h1` through `h5` and `a1` through `a5` are the five players of the home team and the away team on the field at that moment in positions 1 through 5.
+Reshape the data set to combine all player variables. Extract position numbers. For each game identify how many players were playing in each position. 
+
+Draw side-by-side boxplots of the number of players by position. Comment.
+
+```{r}
+# write your code here
+```
+
+
+
