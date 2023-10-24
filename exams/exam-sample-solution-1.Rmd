@@ -142,7 +142,7 @@ pbp <- pbp %>% separate(elapsed, into=c("hour", "minute", "second"), sep=":") %>
   )
 pbp %>% 
   filter(game_id=="21700002") %>%
-  ggplot(aes(x = elapsed, y = event_type,  colour=team)) + 
+  ggplot(aes(x = time_played, y = event_type,  colour=team)) + 
   geom_point() +
   facet_grid(period~.)
 

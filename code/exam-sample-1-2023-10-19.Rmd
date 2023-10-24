@@ -160,6 +160,26 @@ For game number  `21700003` plot the geographic location of each play on the cou
 
 ```{r}
 # write your code here
+
+pbp %>% 
+  group_by(event_type) %>% 
+  summarise(
+    missing_x = sum(is.na(converted_x)),
+    missing_y = sum(is.na(converted_y))
+  )
+
+
+pbp %>% 
+  filter(!is.na(converted_x), 
+         !is.na(converted_y)) %>% 
+  pull(event_type) %>% 
+  unique()
+
+pbp %>% 
+  filter(game_id == 21700003) %>% 
+  ggplot(aes(x = converted_x, y = converted_y,
+             color = team, shape = result)) +
+  geom_point()
 ```
 
 
@@ -171,6 +191,20 @@ Is there any evidence that shots closer to the basket are successful more often?
 
 ```{r}
 # write your code here
+
+pbp <- pbp %>% 
+  mutate(
+    d = sqrt(original_x^2 + original_y^2)
+  )
+
+pbp %>% 
+  filter(team!="") %>% 
+  ggplot(aes(x = result, y = d)) +
+  geom_boxplot() +
+  # facet_grid(.~team)
+  facet_wrap(~team)
+  # coord_flip()
+
 ```
 
 
@@ -184,6 +218,22 @@ Plot the timeline (`time_played`) of events (`event_type`) for game with the id 
 
 ```{r}
 # write your code here
+
+pbp <- pbp %>% 
+  separate(elapsed, 
+           into = c("hour", "min", "sec")) %>% 
+  mutate(
+    min = parse_number(min),
+    sec = parse_number(sec),
+    time_played = min*60 + sec + 12 * 60 * (period - 1)
+  )
+
+pbp %>% 
+  filter(game_id == 21700002) %>% 
+  ggplot(aes(x = time_played, y = event_type,
+             color = team)) +
+  geom_point() +
+  facet_grid(period~.)
 ```
 
 
@@ -196,6 +246,23 @@ Draw side-by-side boxplots of the number of players by position. Comment.
 
 ```{r}
 # write your code here
+
+player_position <- pbp %>% 
+  pivot_longer(a1:h5,
+               names_to = "player_position",
+               values_to = "player_position_name") %>% 
+  mutate(
+    player_position = parse_number(player_position)
+  ) %>% 
+  group_by(game_id, player_position) %>% 
+  summarise(
+    num_players = length(unique(player_position_name))
+  )
+
+player_position %>% 
+  ggplot(aes(x = factor(player_position), y = num_players)) +
+  geom_boxplot()
+
 ```
 
 
