@@ -121,10 +121,16 @@ df_homicide_16_20$rate <-
 quantile(1:100, 0.9)
 rate_90 <- quantile(df_homicide_16_20$rate, 0.9)
 filter(df_homicide_16_20, rate >= rate_90)
+
+
 ggplot(filter(df_homicide_16_20, rate >= rate_90), 
        aes(x = year, y = rate, color = state)) +
   geom_line()
 
+df_homicide_16_20 %>% 
+  filter(rate >= rate_90) %>% 
+  ggplot(aes(x = year, y = rate, color = state)) +
+  geom_line()
 
 
 
