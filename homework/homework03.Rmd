@@ -30,7 +30,7 @@ The information in the penguins data is collected by several antarctic research 
 
 For all of the questions, we would like to see your answer based on R code, i.e. for each question include a code chunk with the relevant code AND write the answer to the question based on the code results in plain English.
 
-2.  How many penguins are part of the studies? What type doe the variables have that were collected? Show your code.
+2.  How many penguins are part of the studies? What variables were collected in the data? Show your code.
 
 ```{r}
 # Your code goes here
