@@ -147,7 +147,23 @@ pbp %>%
   filter(
     mvp == 1 # filter to get the first rank
   )
+```
 
+```{r}
+
+pbp %>% 
+  filter(player != '') %>% 
+  group_by(game_id, team, player) %>% # for each game and each team and each player
+  summarise(
+    player_total_points = sum(points, na.rm = TRUE), # find the total points
+    .groups = 'drop' # although not necessary, remove the grouping structure so that we can do another group_by
+  ) %>% 
+  group_by(game_id, team) %>% # for each game and each team
+  mutate(
+    mvp_player = player[which.max(player_total_points)] # calculate (not summarize) the rank based on the total points, from top to bottom
+  ) %>% 
+  select(game_id, team, player, mvp_player, player_total_points) %>% 
+  filter(player == mvp_player)
 ```
 
 
