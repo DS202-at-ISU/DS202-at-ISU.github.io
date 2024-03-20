@@ -197,6 +197,30 @@ Is there any evidence that shots closer to the basket are successful more often?
 
 ```{r}
 # write your code here
+pbp$d <- sqrt(pbp$original_x^2 + pbp$original_y^2)
+
+pbp <- pbp %>% mutate(
+  d = sqrt(original_x^2 + original_y^2)
+)
+```
+
+```{r}
+pbp %>% ggplot(aes(x = result, y = d)) +
+  geom_boxplot() +
+  facet_wrap(~team)
+```
+
+```{r}
+pbp %>% ggplot(aes(x = result, y = d)) +
+  geom_boxplot() +
+  facet_grid(. ~ team)
+```
+
+
+```{r}
+pbp %>% ggplot(aes(x = team, y = d)) +
+  geom_boxplot() +
+  facet_wrap(~result)
 ```
 
 
@@ -206,11 +230,30 @@ Is there any evidence that shots closer to the basket are successful more often?
 The variable `elapsed` is recorded in hour-minute-second format. Convert the information into seconds (hint: you could introduce helper variables for the conversion).
 The `elapsed` time variable starts over in each period (a period has 12 mins). Introduce a new variable called `time_played` that keeps track of the time (in seconds) from the beginning of a game to the end.
 
+```{r}
+# write your code here
+pbp <- pbp %>% 
+  separate(elapsed, c("hour", "minute", "second"),
+           sep = ":") %>% 
+  mutate(
+    minute = parse_number(minute),
+    second = parse_number(second),
+    total_seconds = minute * 60 + second,
+    time_played = (period - 1) * 12 * 60 + total_seconds
+  )
+```
+
 Plot the timeline (`time_played`) of events (`event_type`) for game with the id `21700002` in a scatterplot. Colour by team. Make Facet by `period`. Comment on the result.
 
 ```{r}
-# write your code here
+pbp %>% 
+  filter(game_id == "21700002") %>% 
+  ggplot(aes(x = time_played, y = event_type,
+             color = team)) +
+  geom_point() +
+  facet_grid(period~.)
 ```
+
 
 
 ## Question #6: Who is playing?
@@ -218,11 +261,38 @@ Plot the timeline (`time_played`) of events (`event_type`) for game with the id 
 Variables `h1` through `h5` and `a1` through `a5` are the five players of the home team and the away team on the field at that moment in positions 1 through 5.
 Reshape the data set to combine all player variables. Extract position numbers. For each game identify how many players were playing in each position. 
 
+```{r}
+# write your code here
+position_number <- pbp %>% 
+  pivot_longer(a1:h5, names_to = "position",
+               values_to = "players_name") %>% 
+  mutate(
+    position = parse_number(position)
+  ) %>% 
+  group_by(game_id, position) %>% 
+  summarise(
+    num_players = length(unique(players_name))
+  )
+
+```
+
 Draw side-by-side boxplots of the number of players by position. Comment.
 
 ```{r}
-# write your code here
+position_number %>% 
+  ggplot(aes(x = factor(position), y = num_players)) +
+  geom_boxplot()
 ```
+
+
+
+
+
+
+
+
+
+
 
 
 
