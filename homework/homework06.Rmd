@@ -1,13 +1,13 @@
 ---
-title: 'Homework #5'
+title: 'Homework #6'
 author: "Your Name"
-date: "11/1/2023"
+date: "04/08/2024"
 output: html_document
 ---
 ---
-title: 'Homework #5'
+title: 'Homework #6'
 author: "Your Name"
-date: "11/1/2023"
+date: "04/08/2024"
 output: html_document
 ---
 
