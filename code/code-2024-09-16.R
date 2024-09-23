@@ -48,7 +48,7 @@ ggplot(data = mydata,
        aes(
          x = x,
          y = y,
-         # color = type
+         color = type
        )) +
   geom_point() +
   geom_line()
