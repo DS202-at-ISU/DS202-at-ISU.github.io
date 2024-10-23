@@ -1,0 +1,312 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# March Madness
+
+
+Basketball is a multimillion dollar sports that fascinates millions of people all year round peaking in March Madness each year.
+Here, we are using play-by-play data on all NBA games on two days in Oct 2017. 
+
+## Question #1: First Overview
+
+Read the data from [sample-combined-pbp-stats.csv](https://raw.githubusercontent.com/DS202-at-ISU/DS202-at-ISU.github.io/master/exams/sample-combined-pbp-stats.csv) without downloading the file locally. (Hint: `?read.csv`)
+Each line of the file describes one play in a game. 
+
+- How many rows and columns does the data have? What are the variables called?
+- each individual game is assigned a unique identifier `game_id`. How many games are recorded in the data and how many plays (number of rows) does a game have on average?
+
+```{r}
+# write your code here
+data <- read.csv("https://raw.githubusercontent.com/DS202-at-ISU/DS202-at-ISU.github.io/master/exams/sample-combined-pbp-stats.csv")
+dim(data)
+colnames(data)
+```
+
+```{r}
+unique(data$game_id)
+
+library(tidyverse)
+
+data %>% 
+  group_by(game_id) %>% 
+  summarise(
+    n = n()
+  )
+
+data %>% 
+  group_by(game_id) %>% 
+  tally()
+
+game_plays <- data %>% 
+  count(game_id)
+
+mean(game_plays$n)
+```
+
+in total, we have 2386 rows and 44 columns. The column names are printed by colnames().
+
+There are 5 games. On average, each game has 477.2 plays.
+
+
+## Question #2: Who won? 
+
+For each game, the variable `points` keeps track of the number of points attempted in each play. 
+
+- Use functions from the `dplyr` package to work out the number of points each team scored (check `result`). Filter out all plays that are not associated with any of the teams. 
+
+```{r}
+data %>% 
+  filter(team != '', 
+         result == 'made') %>% 
+  group_by(game_id, team) %>% 
+  summarise(
+    final_points = sum(points, na.rm = TRUE)
+  )
+```
+
+
+- Compare your scores with the final values of home and away scores (check for `event_type` and `period`)
+
+```{r}
+data %>% 
+  filter(event_type == 'end of period',
+         period == 4) %>% 
+  select(home_score, away_score)
+```
+
+```{r}
+data %>% 
+  filter(game_id == 21700003,
+         team == 'CHA') %>% 
+  select(away_score, points) %>%
+  View()
+
+tt <- data %>% 
+  filter(game_id == 21700003,
+         team == 'CHA') %>% 
+  pull(points)
+tt2 <- data %>% 
+  filter(game_id == 21700003,
+         team == 'CHA') %>% 
+  pull(away_score)
+
+unique(tt2)
+tt <- tt[!is.na(tt)]
+
+tt3 <- sapply(seq_along(tt), function(x) sum(tt[1:x]))
+
+unique(tt3) - unique(tt2)
+```
+
+
+- Using `ggplot2` plot scores by team. Sort teams by their median scores.
+
+```{r}
+data %>% 
+  filter(team != '', 
+         result == 'made') %>% 
+  group_by(game_id, team) %>% 
+  summarise(
+    final_points = sum(points, na.rm = TRUE)
+  ) %>% 
+  ggplot(aes(
+    x = reorder(team, final_points, median), 
+    y = final_points)) +
+  geom_col()
+
+```
+
+
+- In a second step, use the scores to identify winning and losing teams of each game (Hint: use dplyr again and remember what `which.max` and `which.min` are doing). 
+
+```{r}
+team_scores <- data %>% 
+  filter(team != '', 
+         result == 'made') %>% 
+  group_by(game_id, team) %>% 
+  summarise(
+    final_points = sum(points, na.rm = TRUE)
+  )
+
+team_scores %>% 
+  group_by(game_id) %>% 
+  summarise(
+    winning_team = team[which.max(final_points)],
+    losing_team = team[which.min(final_points)]
+  )
+
+```
+
+
+- `player` keeps track of which player makes a shot. For each game,  identify which player in each team scored the most points. (Hint: `?rank`)
+
+```{r}
+# write your code here
+data %>% 
+  filter(team != '') %>% 
+  group_by(game_id, team, player) %>%
+  summarise(
+    player_points = sum(points, na.rm = TRUE)
+  ) %>% 
+  arrange(game_id, team, desc(player_points))
+
+
+data %>% 
+  filter(team != '') %>% 
+  group_by(game_id, team, player) %>%
+  summarise(
+    player_points = sum(points, na.rm = TRUE),
+    .groups = 'drop'
+  ) %>% 
+  group_by(game_id, team) %>% 
+  summarise(
+    best_player =
+      player[which.max(player_points)],
+    best_player_points = 
+      player_points[which.max(player_points)],
+    .groups = 'drop'
+  )
+```
+
+```{r}
+data %>% 
+  filter(team != '') %>% 
+  group_by(game_id, team, player) %>%
+  summarise(
+    player_points = sum(points, na.rm = TRUE)
+  ) %>% 
+  group_by(game_id, team) %>% 
+  mutate(
+    mvp = rank(-player_points)
+  ) %>% 
+  filter(mvp == 1)
+```
+
+
+## Question #3 : On the court
+
+The variables `converted_x` and `converted_y` give the location of the acting player on the court.  Check with the variable `event_type` to see, for which types of play we have geographic information.
+
+```{r}
+data %>% 
+  select(event_type, converted_x) %>% 
+  group_by(event_type) %>% 
+  summarise(
+    has_x = any(is.na(converted_x))
+  )
+```
+
+
+For game number  `21700003` plot the geographic location of each play on the court, colour by team and incorporate visually the play's outcome (variable `result`). 
+
+```{r}
+# write your code here
+data %>% 
+  filter(game_id == 21700003,
+         event_type %in% c("shot", "miss")) %>%
+  ggplot(
+    aes(x = converted_x, y = converted_y,
+        color = team, shape =  result)
+  ) +
+  geom_point()
+  
+
+```
+
+
+## Question #4: Distance hurts?
+
+Is there any evidence that shots closer to the basket are successful more often? For that,
+- introduce a new variable `d` into the data that captures the distance of a player from the basket (basket is in [0,0] for variables `original_x` and `original_y`).
+
+```{r}
+data <- data %>% 
+  mutate(
+    d = sqrt(original_x^2 + original_y^2)
+  )
+```
+
+
+- draw side-by-side boxplots of distance by result and team (using ggplot2). Interpret. (Hint: you can put either `result` or `team` on the x-axis and the remaining variable into facet)
+
+```{r}
+# write your code here
+data %>% 
+  filter(result %in% c('made', 'missed')) %>% 
+  ggplot(aes( x = result, y = d)) +
+  geom_boxplot() +
+  facet_wrap(~team)
+```
+
+comments: from the side-by-side boxplot above, 
+
+
+## Question #5: Timeline
+
+The variable `elapsed` is recorded in hour-minute-second format. Convert the information into seconds (hint: you could introduce helper variables for the conversion).
+The `elapsed` time variable starts over in each period (a period has 12 mins). Introduce a new variable called `time_played` that keeps track of the time (in seconds) from the beginning of a game to the end.
+
+```{r}
+data <- data %>% 
+  separate(elapsed, 
+           into = c("hour", "minute", "second"),
+           sep = ':') %>% 
+  mutate(
+    hour = parse_number(hour),
+    minute = parse_number(minute),
+    second = parse_number(second),
+    time_played = (period-1)*12*60 + minute*60 + second
+  )
+```
+
+
+Plot the timeline (`time_played`) of events (`event_type`) for game with the id `21700002` in a scatterplot. Colour by team. Make Facet by `period`. Comment on the result.
+
+```{r}
+# write your code here
+data %>% 
+  filter(game_id == 21700002) %>% 
+  ggplot(aes(x = time_played,
+             y = event_type,
+             color = team)) +
+  geom_point() +
+  facet_grid(period~.)
+```
+
+
+## Question #6: Who is playing?
+
+Variables `h1` through `h5` and `a1` through `a5` are the five players of the home team and the away team on the field at that moment in positions 1 through 5.
+Reshape the data set to combine all player variables. Extract position numbers. For each game identify how many players were playing in each position. 
+
+```{r}
+position_info <- data %>% 
+  pivot_longer(a1:h5,
+               names_to = "position",
+               values_to = "pos_player") %>%
+  mutate(
+    position = parse_number(position)
+  ) %>% 
+  group_by(game_id, position) %>% 
+  summarise(
+    unique_player =
+      length(unique(pos_player))
+  )
+```
+
+
+Draw side-by-side boxplots of the number of players by position. Comment.
+
+```{r}
+# write your code here
+position_info %>% 
+  ggplot(aes(x = factor(position), y = unique_player)) +
+  geom_boxplot() +
+  xlab("position") +
+  ylab("number of players")
+```
+comments: 
+
+
