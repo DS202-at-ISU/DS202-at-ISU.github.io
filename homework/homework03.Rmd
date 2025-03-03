@@ -1,12 +1,13 @@
 ---
 title: 'Homework #3'
 author: "Your Name"
+date: "03/03/2025"
 output: html_document
 ---
-
 ---
 title: 'Homework #3'
 author: "Your Name"
+date: "03/03/2025"
 output: html_document
 ---
 
@@ -14,45 +15,22 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Palmer Penguins
+## Chick weights
 
-In this homework we will use the `penguins` data set. This data set is part of the `palmerpenguins` package. You can load the data set by executing the command:
+The `ChickWeight` data set is part of the base package `datasets`. See `?ChickWeight` for details on the data.
+For all of the questions use `dplyr` functions whenever possible.
 
-```{r}
-data(penguins, package="palmerpenguins")
-```
+1. Download the RMarkdown file with these homework instructions to use as a template for your work.
+Make sure to replace "Your Name" in the YAML with your name. To get full points, show your R code (in a code chunk) and write answers to the questions.
+2. (1 pt) What variables are part of the dataset?
+3. (2 pts) Get a frequency breakdown of the number of chicks, their average weight and the standard deviation of the weights in each of the diets at the start of the study. <br>
+ 0.5 pts of extra credit: construct a ggplot that shows average weights by diet with an interval (shown as a line) of +- the standard deviation around the averages. (Hint: read this article regarding [ggplot error bars](http://www.sthda.com/english/wiki/ggplot2-error-bars-quick-start-guide-r-software-and-data-visualization))
+4. (2.5 pts) Each chick should have twelve weight measurements. Use the dplyr package to identify how many chicks have a complete set of weight measurements and how many measurements there are on average in the incomplete cases. Extract a subset of the data for all chicks with complete information and name the data set `complete`. (Hint: you might want to use mutate to introduce a helper variable consisting of the number of observations)
+5. (.5 pt) In the complete data set introduce a new variable that measures the current weight difference compared to day 0. Name this variable  `weightgain`. (Hint: use mutate and `?mutate` to check the parameter `.by`. This parameter can create a temporary `group_by` so that we can do calculation in each subgroup, i.e. for each combination of chick and diet, `weight - min(weight)`)
+6. (2.5 pts)  Use ggplot2 to create side-by-side boxplots of `weightgain` by `Diet` for day 21. Describe the relationship in 2-3 sentences. Change the order of the categories in the Diet variable such that the boxplots are ordered by median `weightgain`.
 
-If the command above throws an error message about the package not found, make sure to install the `palmerpenguins` package on your machine.
 
-The information in the penguins data is collected by several antarctic research teams, who took body measurements of different types of penguins in three different locations. See `?penguins` for a description of all of the variables and a bit of the scientific background of this data.
+Note: 1.5 pts your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio. 
 
-1.  Download the RMarkdown file with these homework instructions to use as a template for your work. Make sure to replace "Your Name" in the YAML with your name.
 
-For all of the questions, we would like to see your answer based on R code, i.e. for each question include a code chunk with the relevant code AND write the answer to the question based on the code results in plain English.
-
-2.  How many penguins are part of the studies? What variables were collected in the data? Show your code.
-
-```{r}
-# Your code goes here
-
-```
-
-**Replace this text with your answers to question 2** <br>
-Rubric: 1 point (.5 for the code, 0.5 for the answer)
-
-3.  How does the length (`bill_length_mm`) of a  penguin's beak relate to its depth (`bill_depth_mm`)?  Use the `ggplot2` package to show a chart, describe the relationship in words. Describe the structure and propose a follow-up. (3 sentences: structure of the plot, what do you see, follow-up). <br>
-Rubric: 
-- 1 point for constructing the plot
-- 1.5 pts for the 3-sentence description
-4. To investigate the group structure you see in the scatterplot above (this is a mega hint as to what you should be seeing :) ) you decide to add color to the above scatterplot. First, map island to color, then map species to color. Describe the relationship between length (`bill_length_mm`) of a  penguin's beak and its depth (`bill_depth_mm`) under these two color mappings. How do these color mappings inform the relationship between bill lengths and bill depths? <br>
-Rubric: 
-- 1 point for constructing the two plots
-- 1.5 pts for the 3-sentence description of each plot (for a total of 3 pts)
-5.  What is the exact relationship between species and islands? Draw a barchart and add some color. Make sure to describe the relationship in words.<br>
-Rubric: 
-- 1 point for constructing the plot
-- 1.5 pts for the 3-sentence description
-
-Note: your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio.
-
-For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it.
+For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it. 

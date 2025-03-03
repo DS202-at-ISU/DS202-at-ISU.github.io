@@ -11,6 +11,7 @@
 
 <meta name="author" content="Your Name" />
 
+<meta name="date" content="2025-03-03" />
 
 <title>Homework #3</title>
 
@@ -351,77 +352,52 @@ display: none;
 
 <h1 class="title toc-ignore">Homework #3</h1>
 <h4 class="author">Your Name</h4>
+<h4 class="date">03/03/2025</h4>
 
 </div>
 
 
-<div id="palmer-penguins" class="section level2">
-<h2>Palmer Penguins</h2>
-<p>In this homework we will use the <code>penguins</code> data set. This
-data set is part of the <code>palmerpenguins</code> package. You can
-load the data set by executing the command:</p>
-<pre class="r"><code>data(penguins, package=&quot;palmerpenguins&quot;)</code></pre>
-<p>If the command above throws an error message about the package not
-found, make sure to install the <code>palmerpenguins</code> package on
-your machine.</p>
-<p>The information in the penguins data is collected by several
-antarctic research teams, who took body measurements of different types
-of penguins in three different locations. See <code>?penguins</code> for
-a description of all of the variables and a bit of the scientific
-background of this data.</p>
+<div id="chick-weights" class="section level2">
+<h2>Chick weights</h2>
+<p>The <code>ChickWeight</code> data set is part of the base package
+<code>datasets</code>. See <code>?ChickWeight</code> for details on the
+data. For all of the questions use <code>dplyr</code> functions whenever
+possible.</p>
 <ol style="list-style-type: decimal">
 <li>Download the RMarkdown file with these homework instructions to use
 as a template for your work. Make sure to replace “Your Name” in the
-YAML with your name.</li>
+YAML with your name. To get full points, show your R code (in a code
+chunk) and write answers to the questions.</li>
+<li>(1 pt) What variables are part of the dataset?</li>
+<li>(2 pts) Get a frequency breakdown of the number of chicks, their
+average weight and the standard deviation of the weights in each of the
+diets at the start of the study. <br> 0.5 pts of extra credit: construct
+a ggplot that shows average weights by diet with an interval (shown as a
+line) of +- the standard deviation around the averages. (Hint: read this
+article regarding <a href="http://www.sthda.com/english/wiki/ggplot2-error-bars-quick-start-guide-r-software-and-data-visualization">ggplot
+error bars</a>)</li>
+<li>(2.5 pts) Each chick should have twelve weight measurements. Use the
+dplyr package to identify how many chicks have a complete set of weight
+measurements and how many measurements there are on average in the
+incomplete cases. Extract a subset of the data for all chicks with
+complete information and name the data set <code>complete</code>. (Hint:
+you might want to use mutate to introduce a helper variable consisting
+of the number of observations)</li>
+<li>(.5 pt) In the complete data set introduce a new variable that
+measures the current weight difference compared to day 0. Name this
+variable <code>weightgain</code>. (Hint: use mutate and
+<code>?mutate</code> to check the parameter <code>.by</code>. This
+parameter can create a temporary <code>group_by</code> so that we can do
+calculation in each subgroup, i.e. for each combination of chick and
+diet, <code>weight - min(weight)</code>)</li>
+<li>(2.5 pts) Use ggplot2 to create side-by-side boxplots of
+<code>weightgain</code> by <code>Diet</code> for day 21. Describe the
+relationship in 2-3 sentences. Change the order of the categories in the
+Diet variable such that the boxplots are ordered by median
+<code>weightgain</code>.</li>
 </ol>
-<p>For all of the questions, we would like to see your answer based on R
-code, i.e. for each question include a code chunk with the relevant code
-AND write the answer to the question based on the code results in plain
-English.</p>
-<ol start="2" style="list-style-type: decimal">
-<li>How many penguins are part of the studies? What variables were
-collected in the data? Show your code.</li>
-</ol>
-<pre class="r"><code># Your code goes here</code></pre>
-<p><strong>Replace this text with your answers to question 2</strong>
-<br> Rubric: 1 point (.5 for the code, 0.5 for the answer)</p>
-<ol start="3" style="list-style-type: decimal">
-<li>How does the length (<code>bill_length_mm</code>) of a penguin’s
-beak relate to its depth (<code>bill_depth_mm</code>)? Use the
-<code>ggplot2</code> package to show a chart, describe the relationship
-in words. Describe the structure and propose a follow-up. (3 sentences:
-structure of the plot, what do you see, follow-up). <br> Rubric:</li>
-</ol>
-<ul>
-<li>1 point for constructing the plot</li>
-<li>1.5 pts for the 3-sentence description</li>
-</ul>
-<ol start="4" style="list-style-type: decimal">
-<li>To investigate the group structure you see in the scatterplot above
-(this is a mega hint as to what you should be seeing :) ) you decide to
-add color to the above scatterplot. First, map island to color, then map
-species to color. Describe the relationship between length
-(<code>bill_length_mm</code>) of a penguin’s beak and its depth
-(<code>bill_depth_mm</code>) under these two color mappings. How do
-these color mappings inform the relationship between bill lengths and
-bill depths? <br> Rubric:</li>
-</ol>
-<ul>
-<li>1 point for constructing the two plots</li>
-<li>1.5 pts for the 3-sentence description of each plot (for a total of
-3 pts)</li>
-</ul>
-<ol start="5" style="list-style-type: decimal">
-<li>What is the exact relationship between species and islands? Draw a
-barchart and add some color. Make sure to describe the relationship in
-words.<br> Rubric:</li>
-</ol>
-<ul>
-<li>1 point for constructing the plot</li>
-<li>1.5 pts for the 3-sentence description</li>
-</ul>
-<p>Note: your submission is supposed to be fully reproducible, i.e. the
-TA and I will ‘knit’ your submission in RStudio.</p>
+<p>Note: 1.5 pts your submission is supposed to be fully reproducible,
+i.e. the TA and I will ‘knit’ your submission in RStudio.</p>
 <p>For the submission: submit your solution in an R Markdown file and
 (just for insurance) submit the corresponding html (or Word) file with
 it.</p>
