@@ -81,7 +81,7 @@ french_fries %>%
              shape = factor(rep))) +
   geom_point() +
   facet_grid(treatment ~ scale)
-  
+
 # fbiwide
 library(classdata)
 fbilong <- fbiwide %>% 
