@@ -28,4 +28,76 @@ end_date - years(1)
 end_date - days(10)
 now() + days(10)
 
+ames %>% 
+  mutate(
+    year = year(Date)
+  ) %>% 
+  group_by(year) %>% 
+  tally() %>% 
+  ggplot(aes(x = year, y = n)) +
+  geom_col()
+
+ames %>% 
+  mutate(
+    year = year(Date)
+  ) %>% 
+  group_by(year) %>% 
+  summarise(
+    total_volumn = sum(`Volume Sold (Gallons)`)
+  ) %>% 
+  ggplot(aes(x = year, y = total_volumn)) +
+  geom_col()
+
+ames %>% 
+  mutate(
+    weekday = wday(Date, label = TRUE)
+  ) %>% 
+  group_by(weekday) %>% 
+  tally() %>% 
+  ggplot(aes(x = weekday, y = n)) +
+  geom_col()
+
+ames %>% 
+  mutate(
+    weekday = wday(Date, label = TRUE)
+  ) %>% 
+  group_by(weekday) %>% 
+  summarise(
+    total_volumn = sum(`Volume Sold (Gallons)`)
+  ) %>% 
+  ggplot(aes(x = weekday, y = total_volumn)) +
+  geom_col()
+
+ames %>% 
+  mutate(
+    year = year(Date),
+    weekday = wday(Date, label = TRUE)
+  ) %>% 
+  group_by(year, weekday) %>% 
+  summarise(
+    total_volumn = sum(`Volume Sold (Gallons)`)
+  ) %>% 
+  ggplot(aes(x = weekday, y = total_volumn)) +
+  geom_col() +
+  facet_wrap(~ year)
+
+ames %>% 
+  group_by(Date) %>% 
+  tally() %>% 
+  pull(n) %>% 
+  mean()
+
+ames %>% 
+  group_by(Date) %>% 
+  tally() %>% 
+  complete(
+    Date = seq(mdy("01-01-2012"), 
+               max(ames$Date), "day"),
+    fill = list(n = 0)
+  ) %>% 
+  pull(n) %>% 
+  mean()
+
+
+
 
