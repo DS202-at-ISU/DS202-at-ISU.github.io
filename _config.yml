@@ -11,7 +11,7 @@ navigation:
 - text: Home
   url: /index.html
 - text: Schedule
-  url: /schedule_summer.html
+  url: /schedule.html
 - text: Labs
   url: /labs.html
 - text: Homework
