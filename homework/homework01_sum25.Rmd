@@ -1,0 +1,104 @@
+---
+title: 'DS 2020 - Summer 2025 - Homework #1'
+author: "Your Name"
+output: html_document
+---
+
+---
+title: 'DS 2020 - Summer 2025 - Homework #1'
+author: "Your Name"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Instruction Lab Assignment
+
+If this is the first time you use git on your machine, you should start with [chapter 7](https://happygitwithr.com/hello-git)
+
+Follow the step-by-step instructions in [Chapter 12 of Happy git with R](https://happygitwithr.com/rstudio-git-github.html), create your own repo under your account. Note: don't do the last step. DO NOT delete the repo!
+
+## part 1
+
+Describe your experience: make a note of each step. In case you run into a problem, describe it and the error message.
+
+> please write your experience below
+
+### example
+
+#### Step 12.2
+
+Will's note: xxx
+
+#### Step 12.3
+
+Will's note: xxx
+
+## part 2
+
+Create a new file or add any types of file into your local repository and practice the "add-commit-pull-push" cycle. Then check your remote on GitHub to make sure it succeeds.
+
+# ggplot2 Homework Assignment
+
+## Swiss Banknotes
+
+1.  Download the RMarkdown file with these homework instructions to use as a template for your work. Make sure to replace "Your Name" in the YAML with your name.
+
+2.  The R package `mclust` contains a data set called `banknote`, consisting of (physical) measurements on 200 Swiss bank notes, 100 of which are genuine, while the other half is counterfeit. Load this data set (you might have to install the package) using the code below.
+
+```{r, message = FALSE}
+# install.packages("mclust")
+library(mclust) # if this throws an error of the form 'there is no package called mcmclust', uncomment the line above, run it once, then comment the line out again and run the code chunk again.
+data(banknote)
+```
+
+3.  Use one of our object inspecting functions and interpret the result in the data that you see.
+
+```{r}
+
+```
+
+4.  Use the package `ggplot2` to draw a barchart of `Status`. Map `Status` to the fill color of the barchart.
+
+```{r}
+
+```
+
+5.  Use the package `ggplot2` to draw a histogram of one of the variables in the dataset that shows a distinction between genuine and counterfeit banknotes. Use fill color to show this difference. Choose the binwidth such that there are no gaps in the middle range of the histogram.
+
+```{r}
+
+```
+
+6.  Use the package `ggplot2` to draw a scatterplot of two (continuous) measurements, color by `Status`. Find a pair of measurements that allow you to separate perfectly between genuine and counterfeit banknotes.
+
+```{r}
+
+```
+
+7.  For each of the three figures above, write a three sentence summary, describing the
+    a.  **structure of the plot**: what type of plot is it? Which variables are mapped to x, to y, and to the (fill) color?
+
+```{r}
+  
+```
+
+b.  **main message of the plot**: what is your main finding, i.e. what do you want viewers to learn from the plot?
+
+```{r}
+
+```
+
+c.  **additional message**: point out anomalies or outliers, if there are any.
+
+```{r}
+
+```
+
+<!-- -->
+
+8.  Ensure that your submission is reproducible. We will load your Rmd file into RStudio and knit it. This should match your submitted html file
+
+For the submission: submit your solution in an R Markdown file. Also submit the corresponding html file with it.
