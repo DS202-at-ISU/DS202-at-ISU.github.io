@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 If this is the first time you use git on your machine, you should start with [chapter 7](https://happygitwithr.com/hello-git)
 
-Follow the step-by-step instructions in [Chapter 12 of Happy git with R](https://happygitwithr.com/rstudio-git-github.html), create your own repo under your account. Note: don't do the last step. DO NOT delete the repo!
+Follow the step-by-step instructions in [Chapter 12 of Happy git with R](https://happygitwithr.com/rstudio-git-github.html), create your own **public** repo under your account. Note: don't do the last step. DO NOT delete the repo!
 
 ## part 1
 
@@ -39,6 +39,12 @@ Will's note: xxx
 ## part 2
 
 Create a new file or add any types of file into your local repository and practice the "add-commit-pull-push" cycle. Then check your remote on GitHub to make sure it succeeds.
+
+## part 3
+
+paste the URL of your public repo here
+
+> paste it here:
 
 # ggplot2 Homework Assignment
 
