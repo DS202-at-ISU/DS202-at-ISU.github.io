@@ -1,7 +1,12 @@
 ---
-title: 'DS 2020 - Homework #1'
+title: 'DS 2020 - Summer 2025 - Homework #0'
 author: "Your Name"
-date: "06/09/25"
+output: html_document
+---
+
+---
+title: 'DS 2020 - Summer 2025 - Homework #0'
+author: "Your Name"
 output: html_document
 ---
 
