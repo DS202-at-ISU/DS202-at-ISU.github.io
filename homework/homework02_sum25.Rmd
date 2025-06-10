@@ -1,0 +1,92 @@
+---
+title: 'DS 2020 - Summer 2025 - Homework #2'
+author: "Your Name"
+output: html_document
+---
+
+---
+title: 'DS 2020 - Summer 2025 - Homework #2'
+author: "Your Name"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Lab: Ames Housing Data Exploration
+
+## Overview
+
+In this lab, you will explore the `ames` dataset from the `classdata` package, which contains residential sales data in Ames, Iowa since 2017. All work should be completed in this `.Rmd` file and submitted through Canvas.
+
+The main variable of interest is `Sale_Price`. You will:
+
+-   Investigate this variable and its distribution
+-   Identify and explore one other variable that may relate to `Sale_Price`
+-   Use code, visualizations, and written explanation to communicate your findings
+
+Make sure your `.Rmd` file knits cleanly to `.html`. You will submit both the `.Rmd` and the knitted output.
+
+## Step 1: Data Exploration
+
+1.  Inspect the first few lines of the data set:
+    -   What variables are there?
+    -   Of what type are the variables?
+    -   What does each variable mean?
+    -   What do you expect their data ranges to be?
+    
+> answer
+
+2.  Begin the exploration with the main variable, `Sale_Price`:
+    -   What is the range of this variable?
+    -   Create a histogram to visualize the distribution.
+    -   What is the general pattern? Are there any unusual or extreme values?
+    
+> answer
+
+3.  Choose a second variable that may relate to `Sale_Price`:
+    -   What is the range of this variable? Plot it and describe the pattern.
+    -   Explore the relationship between this variable and `Sale_Price`. Use a scatterplot, boxplot, or faceted bar chart—whichever is most appropriate.
+    -   Describe the pattern. Does this second variable help explain anything you observed in `Sale_Price`?
+    
+> answer
+
+# Homework Assignment
+
+## Chick Weights
+
+The `ChickWeight` data set is part of the base package `datasets`. See `?ChickWeight` for details on the data. For all of the questions use `dplyr` functions whenever possible.
+
+1.  Download the RMarkdown file with these homework instructions to use as a template for your work. Make sure to replace "Your Name" in the YAML with your name. To get full points, show your R code (in a code chunk) and write answers to the questions.
+
+2.  What variables are part of the dataset?
+
+> answer
+
+3.  Get a frequency breakdown of the number of chicks, their average weight and the standard deviation of the weights in each of the diets at the start of the study.
+
+- extra credit: construct a ggplot that shows average weights by diet with an interval (shown as a line) of +- the standard deviation around the averages. (Hint: read this article regarding [ggplot error bars](http://www.sthda.com/english/wiki/ggplot2-error-bars-quick-start-guide-r-software-and-data-visualization))
+
+> answer
+
+4.  Each chick should have twelve weight measurements. Use the `dplyr` package to identify how many chicks have a complete set of weight measurements and how many measurements there are on average in the incomplete cases. Extract a subset of the data for all chicks with complete information and name the data set `complete`. (Hint: you might want to use mutate to introduce a helper variable consisting of the number of observations)
+
+> answer
+
+5.  In the complete data set introduce a new variable that measures the current weight difference compared to day 0. Name this variable `weightgain`. (Hint: use mutate and `?mutate` to check the parameter `.by`. This parameter can create a temporary `group_by` so that we can do calculation in each subgroup, i.e. for each combination of chick and diet, `weight - min(weight)`)
+
+> answer
+
+6.  Use `ggplot2` to create side-by-side boxplots of `weightgain` by `Diet` for day 21. Describe the relationship in 2-3 sentences. Change the order of the categories in the Diet variable such that the boxplots are ordered by median `weightgain`.
+
+> answer
+
+Note: Your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio.
+
+For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it.
+
+(Optional but encouraged):  
+If you’d like to practice using GitHub, feel free to push your `.Rmd` and knitted `.html` file to a **public GitHub repository** under your own account. If you do, paste the link to your GitHub repo below:
+
+> GitHub repo link (optional): `__________`
