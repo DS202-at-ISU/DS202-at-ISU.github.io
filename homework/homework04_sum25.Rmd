@@ -1,0 +1,116 @@
+---
+title: 'DS 2020 - Summer 2025 - Homework #4'
+author: "Your Name"
+output: html_document
+---
+
+---
+title: 'DS 2020 - Summer 2025 - Homework #4'
+author: "Your Name"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Lab: Continuing Liquor Sales in Iowa
+
+## Overview
+
+This is a continuation of the previous homework assignment. We will be using the same dataset and building on the work done in Homework 3.
+
+Recall:
+
+This dataset contains the spirits purchase information of Iowa Class “E” liquor licensees by product and date of purchase from January 1, 2017 to current. The dataset can be used to analyze total spirits sales in Iowa of individual products at the store level.
+
+For all of the questions use functionality from the  `tidyverse` whenever possible.
+
+The code below downloads the data from the Iowa Portal and saves a local copy to your machine. The first time you run this code, make sure you have a good internet connection and enough space on your machine (~50 MB). If the local copy exists, re-knitting the file will load the (binary) file from disk and be much faster. 
+
+```{r, cache=TRUE}
+if (!file.exists("ames-liquor.rds")) {
+  url <- "https://github.com/ds202-at-ISU/materials/blob/master/03_tidyverse/data/ames-liquor.rds?raw=TRUE"
+  download.file(url, "ames-liquor.rds", mode="wb")
+}
+data <- readRDS("ames-liquor.rds")
+```
+
+1. Data cleaning: 
+
+  - extract geographic latitude and longitude from the variable `Store Location`
+  
+> Answer here.
+
+  - check variable types. Pick five variables that need to be converted to a different type and fix those.
+  
+> Answer here.
+
+  - use the package `lubridate` to convert the `Date` variable to a date. Then extract year, month and day from the variable `Date`
+  
+> Answer here.
+
+2. First overview:
+
+  - Plot a scatterplot of lat and long of store locations.
+  
+> Answer here.
+
+  - Provide a visual breakdown of the liquor category (by `Category Name`). Include volume sold in the breakdown. Make sure that all labels are readable.
+
+> Answer here.
+
+3. Find the daily liquor sales in Ames in 2021: 
+
+  - summarize number of sales, volume of liquor sold and amount of money spent. 
+
+> Answer here.
+
+  - Plot volume sold by day (use a scatterplot of volume by day and facet by month). Describe any patterns.
+  
+> Answer here.
+
+  - Find the dates for ISU football home games in Fall 2021 (make use of the internet!). Can you see a pattern? Describe your finding.
+  
+> Answer here.
+
+
+# Homework Assignment
+
+## Box office at the movies
+
+The data set `box` of the package `classdata` contains weekly box office gross for all movies in theaters in the last five years, see `?box` for a description of all variables in the data set.
+
+For all of the questions use functionality from the  `tidyverse` whenever possible.
+
+1. Download the RMarkdown file with these homework instructions to use as a template for your work. Make sure to replace "Your Name" in the YAML with your name.
+
+2. Draw a line for each movie showing total gross (`Total.Gross`) over time. Describe the plot
+
+> Answer here.
+
+3. Find monthly summaries for (a) the number of different movies in theaters and (b) box office gross. Draw lines of these summaries for each year (in two separate plots). Describe the plots in words. Are there seasonal trends? *In your answer, you should show the plots and describe the trends you see in the plots.*
+
+Hint: use `lubridate` to extract `year` and `month` from the date at which box office data was released. 
+
+> Answer here.
+
+
+4. Find box office gross by day of the year (check `?yday`) for each year (we don't actually have daily data - we only have data for every seven days). Plot cumulative yearly gross for each year by day of the year. Describe the plot.
+
+*Extra point for nice labels of very successful movies.*
+
+> Plot here.
+
+What kind of year do you expect the remainder of 2022 to be in terms of box office revenues from movies?
+
+> Answer here.
+
+Note: Your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio.
+
+For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it.
+
+(Optional but encouraged):  
+If you’d like to practice using GitHub, feel free to push your `.Rmd` and knitted `.html` file to a **public GitHub repository** under your own account. If you do, paste the link to your GitHub repo below:
+
+> GitHub repo link (optional): `__________`
