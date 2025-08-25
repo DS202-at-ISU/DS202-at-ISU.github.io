@@ -1,0 +1,138 @@
+---
+title: 'DS 2020 - Summer 2025 - Homework #5'
+author: "Your Name"
+output: html_document
+---
+
+---
+title: 'DS 2020 - Summer 2025 - Homework #5'
+author: "Your Name"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Lab: Scraping (into) the Hall of Fame
+
+## Overview
+
+In this lab, you will:
+
+1.  Scrape the 2025 Hall of Fame voting results
+2.  Clean and reformat the data
+3.  Append your results to the existing `HallOfFame` table from the `Lahman` package
+4.  Save the updated dataset as a `.csv` file
+
+All work should be done in this `.Rmd` file. Submit the `.Rmd` and your knitted `.html` (or `.docx`) to Canvas.
+
+## Step 1: Load the page and extract the table
+
+Use the `rvest` package to read the table of Hall of Fame voting results for 2025 from:
+
+<https://www.baseball-reference.com/awards/hof_2025.shtml>
+
+> Scrape the table and store it in a data frame called `hall2025`.
+
+```{r}
+# Your code here
+```
+
+## Step 2: Clean the table
+
+Perform the following steps:
+
+-   If needed, extract column names from the first row
+
+-   Use `parse_number()` to convert `%`, vote counts, and ranks to numeric
+
+-   Remove any characters (like `%` or `th`) with `gsub()` or `parse_number()`
+
+-   Create a cleaned data frame that contains the **following 9 variables**, matching the Lahman `HallOfFame` table:
+
+     -   `playerID`: set to `NA` for now unless you can match player names manually
+     -   `yearID`: set to `2025`
+     -   `votedBy`: set to `"BBWAA"`
+     -   `ballots`: total number of ballots (should be same for all rows)
+     -   `needed`: number of votes needed for induction
+     -   `votes`: number of votes the player received
+     -   `inducted`: `"Y"` for inducted, `"N"` otherwise
+     -   `category`: set to `"Player"`
+     -   `needed_note`: set to `NA`
+
+You can use `head(HallOfFame)` to inspect the structure.
+
+```{r}
+# Your cleaning code here
+```
+
+## Step 3: Combine with Lahman `HallOfFame` data
+
+Bind your cleaned table (`hall2025_clean`) to the `HallOfFame` data using `bind_rows()` or `rbind()`. Save the result to a new data frame called `final_data`.
+
+```{r}
+# Your combining code here
+```
+
+## Step 4: Save the updated dataset
+
+Save your combined data frame to a file named `HallOfFame.csv` in your working directory.
+
+```{r eval=FALSE}
+# Your saving code here
+```
+
+## Final Notes
+
+-   Be sure your R Markdown file knits without errors
+-   Show all relevant code and intermediate outputs
+-   Submit your `.Rmd` file **and** the knitted `.html` or `.docx` file to Canvas
+
+# Homework Assignment: Data Licensing & Scraping Ethics
+
+This homework builds on the lab by introducing data licensing and ethical considerations in web scraping.
+
+## Part 1: Who owns the data?
+
+1. Under what license is the R package `ggplot2` published? What does that mean for use of its built-in `diamonds` dataset?
+
+2. Find two different versions of a "diamonds" dataset on Kaggle. For each:
+   - Provide the link
+   - Identify its license
+   - Compare the dataset to `ggplot2::diamonds`. Are they the same or different?
+
+```{r}
+# Dataset 1:
+# URL:
+# License:
+# Comparison code:
+
+# Dataset 2:
+# URL:
+# License:
+# Comparison code:
+```
+
+3. What license governs the [Iowa Liquor Sales data](https://data.iowa.gov/Sales-Distribution/Iowa-Liquor-Sales/m3tr-qhgy)? What does this allow you to do with the data?
+
+4. Why do you think there are so many datasets on Kaggle that resemble one another without attribution?
+
+## Part 2: Write Some Scrapers (**EXTRA CREDIT**)
+
+If you're feeling ambitious, try any of the following:
+
+1. Write a function `data_link_scraper()` that extracts dataset links from a Kaggle search (e.g. `https://www.kaggle.com/search?q=diamonds`)
+
+2. Write a function `kaggle_evaluate()` that takes a dataset link and extracts metadata like license, author, and file size.
+
+3. Write a function `same_data()` to test whether a Kaggle dataset is equivalent to `ggplot2::diamonds`.
+
+Note: Your submission is supposed to be fully reproducible, i.e. the TA and I will 'knit' your submission in RStudio.
+
+For the submission: submit your solution in an R Markdown file and (just for insurance) submit the corresponding html (or Word) file with it.
+
+(Optional but encouraged):  
+If you’d like to practice using GitHub, feel free to push your `.Rmd` and knitted `.html` file to a **public GitHub repository** under your own account. If you do, paste the link to your GitHub repo below:
+
+> GitHub repo link (optional): `__________`
