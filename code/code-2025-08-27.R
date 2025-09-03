@@ -12,7 +12,7 @@ head(mtcars)
 ?mtcars
 
 library(remotes)
-remotes::install_github("heike/classdata")
+remotes::install_github("heike/classdata", force = TRUE)
 
 library(classdata)
 head(fbi)
