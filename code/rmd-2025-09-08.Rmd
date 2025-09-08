@@ -1,0 +1,102 @@
+---
+title: "Report"
+author: "Will Ju"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# BRFSS Report
+
+## Introduction
+
+Introduce the dataset
+
+Why we are doing this analysis?
+
+## Data
+
+```{r}
+data <- read.csv("brfss_iowa.csv")
+```
+
+## Verify 6227 obs
+
+```{r}
+dim(data)
+
+str(data)
+
+nrow(data)
+```
+
+From the results above, we can see that there are 6227 obs in this dataset.
+
+## Verify that there are variables WEIGHT2 and HEIGHT3 
+
+```{r}
+"WEIGHT2" %in% colnames(data)
+```
+
+```{r}
+"HEIGHT3" %in% colnames(data)
+```
+
+Since we get two TRUEs, we verify that ...
+
+## Find the cor between ht and wt by gender
+
+```{r}
+ht_male <- data[data$SEX == 1, "HEIGHT3"]
+wt_male <- data[data$SEX == 1, "WEIGHT2"]
+cor(ht_male, wt_male)
+
+```
+
+I get NA, I don't know how to get rid of 
+NAs for cor 
+
+BUT, I searched a little bit, 
+
+```{r}
+cor(ht_male, wt_male, 
+    use = "complete.obs")
+```
+
+I found that the cor is 
+
+## Step further
+
+We found that those 
+
+The following is to solve this problem
+
+### Solution 1: we found other clean variables
+
+```{r}
+
+```
+
+
+### Solution 2: data cleaning
+
+```{r}
+
+```
+
+
+### Comparison
+
+findings: 
+
+## Conclustion
+
+For this analysis, 
+
+
+
+
+
