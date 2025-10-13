@@ -77,7 +77,8 @@ ames_modified <- ames |>
   separate(
     `Store Location`,
     into = c("prefix", "long", "lat"),
-    sep = " "
+    sep = " ",
+    remove = TRUE
   ) |> 
   mutate(
     lat = parse_number(lat),
@@ -114,6 +115,30 @@ ggmap::ggmap(ames_map) +
              data = ames_modified,
              alpha = 0.5)
 
+# the visual above is drawing over 600 thousands
+# dots on the scatter plot, which is lots of computation
+# How do we reduce the amount of computation?
+
+length(unique(ames$`Store Location`))
+# in total, there are only 42 different store locations
+
+store_geo_info <- ames |> 
+  group_by(`Store Location`) |>
+  tally() |> 
+  separate(
+    `Store Location`,
+    into = c("_", "long", "lat"),
+    sep = " "
+  ) |> 
+  mutate(
+    long = parse_number(long),
+    lat = parse_number(lat)
+  ) 
+
+ggmap::ggmap(ames_map) +
+  geom_point(aes(x = long, y = lat, alpha = n),
+             data = store_geo_info) +
+  scale_alpha(range = c(0.5, 1))
 
 
 
