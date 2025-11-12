@@ -3,6 +3,7 @@ title: 'Homework #6'
 author: "Your Name"
 output: html_document
 ---
+
 ---
 title: 'Homework #6'
 author: "Your Name"
@@ -22,10 +23,14 @@ For all of the questions use functionality from the  `tidyverse` whenever possib
 
 1. Download the RMarkdown file with these homework instructions to use as a template for your work.
 Make sure to replace "Your Name" in the YAML with your name.
-2. Draw a line for each movie showing total gross (`Total.Gross`) over time. Describe the plot
-3. Find monthly summaries for (a) the number of different movies in theaters and (b) box office gross. Draw lines of these summaries for each year (in two separate plots). Describe the plots in words. Are there seasonal trends?<br>
+
+2. Draw a line chart. Each line in the chart should represent the total gross (`Total.Gross`) of one movie over time. Describe the plot.
+Hint: use `group` instead of `color` in `aes()` to avoid thousands of colors in one chart.
+
+3. `Gross` shows weekly box office gross in US dollars. Find monthly summaries for the number of different movies in theaters and monthly summaries of box office gross for each movie. Draw lines of these summaries for each year (in two separate plots). Describe the plots in words. Are there seasonal trends?<br>
 Hint: use `lubridate` to extract `year` and `month` from the date at which box office data was released. 
-4. Find box office gross by day of the year (check `?yday`) for each year (we don't actually have daily data - we only have data for every seven days). Plot cumulative yearly gross for each year by day of the year. Describe the plot. <br>
+
+4. Find box office gross by day of the year (check `?yday`) for each year (we don't actually have daily data - we only have data for every seven days). Plot cumulative yearly gross (for each movie) for each year by day of the year. Describe the plot. <br>
 Extra point for nice labels of very successful movies.
 What kind of year do you expect the remainder of 2022 to be in terms of box office revenues from movies?
 
