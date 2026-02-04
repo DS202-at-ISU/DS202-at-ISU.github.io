@@ -1,0 +1,31 @@
+---
+title: "rmd-02-04"
+author: "Will Ju"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Topics Covered
+
+- R markdown
+- How to create an R project
+- Git and GitHub
+
+## Git and GitHub
+
+- terminal commands:
+  - `ls`: listing all files of current directory
+  - `cd`: change directory
+  - `..`: parent directory
+  
+- example GitHub repo: <https://github.com/willju-wangqian/S2026_brfss_prject>
+  - `git add`: select files to be tracked by git
+  - `git commit`: create a checkpoint for your project
+  - `git push`: push local commits to the remote
+
+
+
