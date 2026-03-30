@@ -9,22 +9,95 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+# Intro
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r}
+library(tidyverse)
+# install.packages("lubridate")
+library(lubridate)
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
 ```
 
-## Including Plots
+# Converter functions
 
-You can also embed plots, for example:
+```{r}
 
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+# Your Turn 1
+
+Create date objects for today's date by typing the date in text format and converting it with one of the lubridate converter functions.
+
+Try different formats of writing the date and compare the end results
+
+```{r}
+
+
+```
+
+# Ames Liquor Sales Example
+
+```{r}
+url <- "https://github.com/DS202-at-ISU/materials/blob/master/03_tidyverse/data/ames-liquor.rds?raw=TRUE"
+download.file(url, "ames-liquor.rds", mode = "wb")
+ames <- readRDS("ames-liquor.rds")
+
+```
+
+# Accessor Functions
+
+```{r}
+
+```
+
+# Intervals and Durations
+
+```{r}
+
+```
+
+# Your Turn 2
+
+Use the ames data to answer the following questions:
+
+give a visual breakdown of the number of sales by year. Is there a pattern recognizable? Does that pattern change when considering the volume of alcohol sold?
+
+find the weekday associated with each date in the data. Introduce a variable weekday into the dataset. What is the number of sales by weekday? What is the volume of alcohol sold? Does that pattern hold over the years?
+
+```{r}
+
+
+```
+
+# Example Liquor Sales (cont'd) Time Series
+
+```{r}
+ames %>% 
+  ggplot(aes(x = month(Date, abbr = TRUE, label=TRUE), 
+             weight = `Volume Sold (Gallons)`/1000)) + 
+  geom_bar() + 
+  facet_wrap(~year(Date), ncol = 6) +
+  ylab("Volume of alcohol sold (in thousands of  Gallons)")
+
+
+```
+
+# Your Turn 3
+
+find the number of alcohol sales and volume sold on each day over the time frame. What is the average number of sales each day?
+
+Why are there no 0s in the data? Does that change your assessment of the average number of sales per day?
+
+Challenge: use the functions seq.Date and complete to introduce days into the dataset with no sales. Start by reading the help files for the functions ...
+
+```{r}
+# Hint:
+# group_by(Date)
+# summarise(...)
+# mean(...)
+# look into seq.Date() and complete()
+
+```
+
