@@ -16,13 +16,24 @@ library(tidyverse)
 # install.packages("lubridate")
 library(lubridate)
 
+now()
+class(now())
+typeof(now())
 
+as.numeric(now())
 ```
 
 # Converter functions
 
 ```{r}
+x <- "2026-2-1"
+class(x)
+ymd(x)
+class(ymd(x))
 
+mdy("10-17-2022")
+ydm("2022-17-10")
+ydm("2022-35-10")
 ```
 
 
@@ -33,29 +44,64 @@ Create date objects for today's date by typing the date in text format and conve
 Try different formats of writing the date and compare the end results
 
 ```{r}
+# correct cases
+ymd("2026-03-30")
+mdy("03-30-2026")
 
+# incorrect cases
+mdy("30-03-2026")
 
+# shortcut for getting today's date
+today()
 ```
 
 # Ames Liquor Sales Example
 
 ```{r}
+# load in data
 url <- "https://github.com/DS202-at-ISU/materials/blob/master/03_tidyverse/data/ames-liquor.rds?raw=TRUE"
+# make sure you know which working directory you are in to know where the data will download
 download.file(url, "ames-liquor.rds", mode = "wb")
 ames <- readRDS("ames-liquor.rds")
+view(ames)
+# note that each row in ames data is a sale, so total sales would be total number of rows
 
+# look at date variable
+ames$Date
+class(ames$Date)
+summary(ames$Date)
+
+# Fix Date variable from character to Date type
+ames$Date <- mdy(ames$Date)
+# Check updated
+class(ames$Date)
+summary(ames$Date)
+ames$Date
 ```
 
 # Accessor Functions
 
 ```{r}
+now()
+month(now())
+year(now())
+wday(now(), label = TRUE)
 
+# look at total sales for each day of the week
+library(dplyr)
+ames |>
+  count(wday(Date, label = TRUE))
 ```
 
 # Intervals and Durations
 
 ```{r}
+end_date <- now()
+start_date <- end_date - years(1)
+start_date
 
+# NA here since months can vary (ie February 28 or 29 days, March 31 days)
+now() - months(1)
 ```
 
 # Your Turn 2
@@ -67,21 +113,55 @@ give a visual breakdown of the number of sales by year. Is there a pattern recog
 find the weekday associated with each date in the data. Introduce a variable weekday into the dataset. What is the number of sales by weekday? What is the volume of alcohol sold? Does that pattern hold over the years?
 
 ```{r}
+# Create weekday variable
+ames <- ames |>
+  mutate(
+    weekday = wday(Date, label = TRUE)
+  )
+ames$weekday
 
+# look at number of sales by year
+ames |>
+  ggplot(aes(x = year(Date))) +
+  geom_bar()
+# look at volume sold by year
+ames |>
+  ggplot(aes(x = year(Date),
+             weight = `Volume Sold (Gallons)`)) +
+  geom_bar()
+
+# number of sales by weekday
+ames %>%
+  ggplot(aes(x = weekday)) +
+  geom_bar()
+# alternative syntax: specify data inside ggplot()
+ggplot(data = ames, aes(x = weekday)) +
+  geom_bar()
+
+# total volume sold by weekday
+ames |>
+  ggplot(aes(x = weekday,
+         weight = `Volume Sold (Gallons)`)) +
+  geom_bar()
+# facet by year
+ames |>
+  ggplot(aes(x = weekday,
+         weight = `Volume Sold (Gallons)`)) +
+  geom_bar() +
+  facet_wrap(~year(Date))
 
 ```
 
 # Example Liquor Sales (cont'd) Time Series
 
 ```{r}
+# from class slides
 ames %>% 
   ggplot(aes(x = month(Date, abbr = TRUE, label=TRUE), 
              weight = `Volume Sold (Gallons)`/1000)) + 
   geom_bar() + 
   facet_wrap(~year(Date), ncol = 6) +
   ylab("Volume of alcohol sold (in thousands of  Gallons)")
-
-
 ```
 
 # Your Turn 3
@@ -99,5 +179,47 @@ Challenge: use the functions seq.Date and complete to introduce days into the da
 # mean(...)
 # look into seq.Date() and complete()
 
+# compute average number of sales per day
+result <- ames |>
+  group_by(Date) |>
+  summarise(
+    number_of_sales = n(),
+    volume_sold = sum(`Volume Sold (Gallons)`, na.rm = TRUE)
+  )
+# see variables by date
+result
+# get averages
+mean(result$number_of_sales)
+mean(result$volume_sold)
+
+# But we have missing dates!
+# If no sales were made on a specific day, then it doesn't have a row in the dataset!
+# Use complete() to expand Date variable to fill in missing days between min and max of Date
+# use fill = inside complete() to specify we want 0s in these places
+
+# See how complete works without fill
+result |>
+  complete(
+    Date = seq.Date(min(Date), max(Date), by = "day")
+  )
+
+# now add fill
+result |>
+  complete(
+    Date = seq.Date(min(Date), max(Date), by = "day"),
+    fill = list(number_of_sales = 0, volume_sold = 0)
+  ) 
+
+
+# repeated above piped into a summarise so it is easier to see step by step work
+result |>
+  complete(
+    Date = seq.Date(min(Date), max(Date), by = "day"),
+    fill = list(number_of_sales = 0, volume_sold = 0)
+  ) |>
+  summarise(
+    avg_sales_per_day = mean(number_of_sales),
+    avg_volume_per_day = mean(volume_sold)
+  )
 ```
 
