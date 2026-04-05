@@ -1,4 +1,5 @@
 .DS_Store
 backups/
 
-exams/exam_midterms
+exams/exam_midterms*.rds
+*_cache/
