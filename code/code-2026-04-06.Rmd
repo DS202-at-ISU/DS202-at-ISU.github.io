@@ -17,15 +17,142 @@ library(tidyverse)
 data(nasa, package = "GGally")
 # ??nasa
 
+# We will focus on just one location so the plot is easier to read
+nasa_filtered <- nasa %>% filter(id=="1-1")
+
+# Base plot: map date to x and temperature to y
+nasa |>
+  filter(id == "1-1") |>
+  ggplot(aes(x = date, y = temperature)) +
+  geom_point()
+
+# Base plot: using nasa_filtered to avoid repitition
+nasa_filtered |>
+  ggplot(aes(x = date, y = temperature)) +
+  geom_point()
+
+# Add a second layer: connect the points with lines
+nasa |>
+  filter(id == "1-1") |>
+  ggplot(aes(x = date, y = temperature)) +
+  geom_point() +
+  geom_line()
+
+# Add a model layer: linear trend line
+nasa %>% filter(id=="1-1") %>%
+  ggplot(aes(x = date, y = temperature)) + 
+  geom_point() +
+  geom_line() +
+  geom_smooth(method = "lm", se = FALSE)
+
+# Add text labels for every point
+# Shift labels slightly to the right so they do not sit directly on top of the points (can shift x and y)
+# For shifting, note that "time" elements are used
+nasa %>% filter(id=="1-1") %>%
+  ggplot(aes(x = date, y = temperature)) + 
+  geom_point() +
+  geom_line() +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_text(aes(label = time, x = date + weeks(4)))
+
+# Layer-specific data:
+# only label observations where temperature is greater than 298
+nasa %>% filter(id=="1-1") %>%
+  ggplot(aes(x = date, y = temperature)) + 
+  geom_point() +
+  geom_line() +
+  geom_smooth(method="lm", se = FALSE) +
+  geom_text(aes(label = time, x = date + weeks(4)),
+            data = nasa %>% filter(id == "1-1", temperature > 298))
+
+# Default vs layer-specific aesthetics:
+# the main ggplot() call sets default x and y mappings
+# this text layer adds its own label and colour mapping
+nasa %>% filter(id=="1-1") %>%
+  ggplot(aes(x = time, y = temperature)) + 
+  geom_point() +
+  geom_line() +
+  geom_text(aes(label = id, colour = id),  
+            data = nasa %>% filter(id == "1-1", time == 50))
+
+# If colour is mapped in ggplot(), later layers inherit that mapping
+nasa %>% filter(id=="1-1") %>%
+  ggplot(aes(x = time, y = temperature, colour=id)) + geom_point() +
+  geom_line() +
+  geom_text(aes(label = id), 
+            data = nasa %>% filter(id == "1-1", time == 50))
 
 ```
 
 # Data Joins
 
 ```{r}
+# install.packages("Lahman")
 library(Lahman)
 LahmanData
 
+# Who was inducted in 2018?
+HallOfFame %>% filter(yearID==2018)
 
+# Your turn: Identify 4 players from 2018 Inducted by BBWAA
+HOFer_18 <- HallOfFame |>
+  filter(yearID == 2018,
+         inducted == "Y",
+         votedBy == "BBWAA") |>
+  pull(playerID)
+
+People |>
+  filter(playerID %in% HOFer_18) |>
+  select(playerID, nameFirst, nameLast)
+# note that this above works, but using joins can do this as well
+
+# Example dfs for joins practice
+df1 <- data.frame(id = 1:6, 
+                  trt = rep(c("A", "B", "C"), rep=c(2,1,3)), 
+                  value = c(5,3,7,1,2,3))
+df1
+
+df2 <- data.frame(id=c(4,4,5,5,7,7), 
+                  stress=rep(c(0,1), 3), 
+                  bpm = c(65, 125, 74, 136, 48, 110))
+df2
+
+# left join
+left_join(df1, df2, by="id")
+# alternate way
+df1 |> left_join(df2, by = "id")
+
+# inner join
+inner_join(df1, df2, by = "id")
+# or
+df1 |> inner_join(df2, by = "id")
+
+# Full join
+full_join(df1, df2, by = "id")
+
+
+# Your turn pt1:
+# Join the People and HallOfFame data
+# Find all HOFers who were alive as of 2018
+HOF_result <- HallOfFame |>
+  left_join(People, by = "playerID")
+
+HOF_result |>
+  filter(inducted == "Y",
+         is.na(deathYear) | deathYear > 2018) |>
+  select(playerID, nameFirst, nameLast, deathYear)
+
+# Your turn pt2:
+# How many attempts at being inducted to HOF does Sammy Sosa have?
+HOF_result |>
+  filter(nameFirst == "Sammy",
+         nameLast == "Sosa") |>
+  count()
+
+
+# anti join
+anti_join(df1, df2, by="id") # no values for id in df2
+anti_join(df2, df1, by="id") # no values for id in df1
+# Notice they are NOT SYMMETRIC!!
 ```
 
