@@ -9,4 +9,23 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Intro
+# ggplot Layers
+
+```{r}
+library(tidyverse)
+# install.packages("GGally")
+data(nasa, package = "GGally")
+# ??nasa
+
+
+```
+
+# Data Joins
+
+```{r}
+library(Lahman)
+LahmanData
+
+
+```
+
