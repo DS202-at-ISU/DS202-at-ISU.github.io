@@ -1,0 +1,26 @@
+---
+title: "code-2026-04-08"
+author: "Ben Moolman"
+date: "2026-04-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Maps
+
+
+
+
+
+
+```{r}
+#install.packages("remotes")
+#remotes::install_github("heike/classdata")
+library(classdata)
+data(fbi, package="classdata")
+fbi14 <- fbi %>% filter(year == 2014)
+```
+
