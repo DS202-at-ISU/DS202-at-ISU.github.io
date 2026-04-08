@@ -19,7 +19,17 @@ states <- map_data("state") # install.packages("maps") if needed
 head(states)
 view(states)
 
-
+# Map 1 simple with points
+states %>% ggplot(aes(x = long, y = lat)) + geom_point()
+# Map 2 with lines
+states %>% ggplot(aes(x = long, y = lat)) + 
+  geom_path(aes(group = group))
+# Map 3 with polygons
+states %>% ggplot(aes(x = long, y = lat)) + 
+  geom_polygon(aes(group = group))
+# Map 3 with fill example
+states %>% ggplot(aes(x = long, y = lat)) + 
+  geom_polygon(aes(group = group, fill=lat))
 ```
 
 # Your Turn 1
@@ -28,7 +38,41 @@ view(states)
 counties <- map_data("county")
 View(counties)
 
+# geom_path
+counties |>
+  ggplot(aes(x = long, y = lat)) +
+  geom_path(aes(group = group))
+# geom_polygon
+counties |>
+  ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon()
+# same (group = group can either be in default ggplot or specified within geom_polygon)
+counties |>
+  ggplot(aes(x = long, y = lat)) +
+  geom_polygon(aes(group = group))
+# highlight story county
+counties |>
+  ggplot(aes(x = long, y = lat)) +
+  geom_polygon(aes(group = group)) +
+  geom_polygon(
+    data = counties |>
+      filter(subregion == "story"),
+    fill = "red"
+  )
 
+# county names used most often
+counties |>
+  select(region, subregion) |>
+  unique() |>
+  count(subregion) |>
+  arrange(desc(n)) |>
+  head()
+
+# extra, look at how many states have a washington county (county is subregion)
+counties |>
+  filter(subregion == "washington") |>
+  pull(region) |>
+  unique()
 ```
 
 # Joining with FBI Data
@@ -40,12 +84,49 @@ library(classdata)
 data(fbi, package="classdata")
 fbi14 <- fbi %>% filter(year == 2014)
 
+# Joining the data
+
+# checking data prior to join
+fbi14$region <- tolower(fbi14$state)
+nomatch1 <- fbi14 %>% anti_join(states, by="region")
+# States for which we do not have map data
+unique(nomatch1$state)
+
+nomatch2 <- states %>% anti_join(fbi14, by="region")
+# States for which we do not have crime data
+unique(nomatch2$state)
+
+# joining data
+fbi.map <- fbi14 %>% left_join(states, by="region")
+fbi.map %>% filter(type=="burglary") %>% 
+  ggplot(aes(x = long, y = lat)) +
+  geom_polygon(aes(group=group,
+                   fill=count/population*100000))
 ```
 
 # Your Turn 2
 
 ```{r}
+# fbi 2020 car theft data
+fbi20_car_theft <- fbi |>
+  filter(year == 2020,
+         type == "motor_vehicle_theft") |>
+  mutate(region = tolower(state),
+         rate = count / population * 1000)
 
+# Join the data
+fbi20_car_theft_map <- fbi20_car_theft |>
+  left_join(states, by = "region")
+
+# Final choropleth map
+fbi20_car_theft_map |>
+  ggplot(aes(x = long, y = lat)) +
+  geom_polygon(aes(group = group,
+                   fill = rate)) +
+  scale_fill_gradient2(
+    low = "firebrick2",
+    mid = "white",
+    high = "navy",
+    midpoint = median(fbi20_car_theft$rate)) +
+      ggthemes::theme_map()
 ```
-
-
