@@ -11,10 +11,27 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Maps
 
+```{r}
+library(tidyverse)
+
+# load in states
+states <- map_data("state") # install.packages("maps") if needed
+head(states)
+view(states)
 
 
+```
+
+# Your Turn 1
+
+```{r}
+counties <- map_data("county")
+View(counties)
 
 
+```
+
+# Joining with FBI Data
 
 ```{r}
 #install.packages("remotes")
@@ -22,5 +39,13 @@ knitr::opts_chunk$set(echo = TRUE)
 library(classdata)
 data(fbi, package="classdata")
 fbi14 <- fbi %>% filter(year == 2014)
+
 ```
+
+# Your Turn 2
+
+```{r}
+
+```
+
 
