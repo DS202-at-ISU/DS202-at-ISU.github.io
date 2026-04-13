@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Easy Web Scraping
 
 ```{r}
+library(tidyverse)
 library(rvest)
 url <- "https://en.wikipedia.org/wiki/2023_Baseball_Hall_of_Fame_balloting"
 html <- read_html(url)
