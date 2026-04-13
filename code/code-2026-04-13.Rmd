@@ -9,3 +9,98 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Web Scraping
+
+Easy Web Scraping
+
+```{r}
+library(rvest)
+url <- "https://en.wikipedia.org/wiki/2023_Baseball_Hall_of_Fame_balloting"
+html <- read_html(url)
+html
+
+
+```
+
+Your Turn - Reading Data
+
+```{r}
+
+
+```
+
+Your Turn - Creating New Variables
+
+```{r}
+library(Lahman)
+head(HallOfFame,2)
+
+
+```
+
+Data Munging Building a Join Key
+
+```{r}
+
+```
+
+Your Turn - Identifying Problems
+
+```{r}
+
+
+```
+
+Your Turn - Joining bbwa with People to add playerID from the People dataset
+
+```{r}
+
+```
+
+SelectorGadget Result
+
+```{r}
+# Demo on all players
+url <- "http://www.baseball-reference.com/players"
+html <- read_html(url)
+html %>% html_elements("") %>% html_text()
+
+# Select Active Baseball Players with last name starting with A
+
+```
+
+Your Turn - Fernando Abad
+
+```{r}
+url <- "https://www.baseball-reference.com/players/a/abadfe01.shtml"
+
+```
+
+# Functions in R and your First Scraper
+
+```{r}
+url <- "https://www.baseball-reference.com/awards/hof_2025.shtml"
+library(rvest)
+site <- read_html(url)
+
+```
+
+First Function
+
+```{r}
+
+```
+
+Your Turn - Scraper Function
+
+```{r}
+bbwaa_scraper <- function(url) {
+}
+```
+
+Your Turn - Expanding
+
+```{r}
+
+```
+
