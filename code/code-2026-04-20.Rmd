@@ -1,0 +1,39 @@
+---
+title: "code-2026-04-20"
+author: "Ben Moolman"
+date: "2026-04-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Functions in R and your First Scraper
+
+```{r}
+url <- "https://www.baseball-reference.com/awards/hof_2025.shtml"
+library(rvest)
+site <- read_html(url)
+
+```
+
+First Function
+
+```{r}
+
+```
+
+Your Turn - Scraper Function
+
+```{r}
+bbwaa_scraper <- function(url) {
+}
+```
+
+Your Turn - Expanding
+
+```{r}
+
+```
+

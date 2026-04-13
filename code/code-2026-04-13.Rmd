@@ -20,14 +20,28 @@ url <- "https://en.wikipedia.org/wiki/2023_Baseball_Hall_of_Fame_balloting"
 html <- read_html(url)
 html
 
+# Get tables from html object using html_table()
+tables <- html %>% html_table(fill=TRUE)
 
+# Pull the actual tables from the `tables`
+bbwaa <- tables[[3]]  # candidates on the BBWAA Ballot
+vet1 <- tables[[5]] # Early Baseball Era Committee
+vet2 <- tables[[6]] # Golden Days Era Committee
+bbwaa %>% head()
 ```
 
 Your Turn - Reading Data
 
 ```{r}
-
-
+hof <- "https://bbwaa.com/23-hof/#votingtable"
+html <- read_html(hof)
+# Use html_table() to pull all tables on the website
+hof_tbl <- html %>% html_table()
+# Access the first table
+bbwaa <- hof_tbl[[1]]
+# Rename first column of bbwaa to "First Lastname" (This will help make things easier later)
+names(bbwaa)[1] <- "First Lastname"
+head(bbwaa)
 ```
 
 Your Turn - Creating New Variables
@@ -36,72 +50,121 @@ Your Turn - Creating New Variables
 library(Lahman)
 head(HallOfFame,2)
 
-
+# Use mutate() to create variables to match the HallOfFame dataframe format
+bbwaa <- bbwaa %>% mutate(
+  yearID = 2023,
+  votedBy = "BBWAA",
+  ballots = 389,
+  needed = 292,
+  inducted = ifelse(Votes>=292, "Y", "N"),
+  category = NA, # don't know yet
+  needed_note = NA # not sure what would go here
+) %>% rename(
+  votes = Votes # rename votes to match lowercase of HallOfFame dataframe
+) %>% select(-Percent, -`Years on ballot`) # Remove the Percent and `Years on ballot` variables that were in the original bbwaa dataframe we scraped, so it is more similar to HallOfFame dataframe
 ```
 
 Data Munging Building a Join Key
 
 ```{r}
-
+# Create new variable `First Lastname` in People dataframe using paste()
+People <- People %>% mutate(
+  `First Lastname`=paste(`nameFirst`, `nameLast`)
+)
+view(People)
 ```
 
 Your Turn - Identifying Problems
 
 ```{r}
+bbwaa %>% anti_join(
+  People %>% select(`First Lastname`, playerID), 
+  by="First Lastname")
 
+People %>% filter(nameLast %in% c("Dickey", "Hardy")) %>%
+  select(playerID, nameFirst, nameLast)
 
+# Should notice there are some issues with whitespace around the "." in players nameFirst
+
+# Fixing the issue with whitespace
+People <- People %>% mutate(
+  `First Lastname` = paste(
+    str_replace(nameFirst,"\\. ", "."),  # this uses a regular expression
+    nameLast)
+)
+# Now check 
+People %>% filter(nameLast %in% c("Dickey", "Hardy")) %>%
+  select(playerID, `First Lastname`)
 ```
 
 Your Turn - Joining bbwa with People to add playerID from the People dataset
 
 ```{r}
+# Now let's join again to see if this issue is fixed
+bbwaa <- bbwaa %>% left_join(
+  People %>% select(`First Lastname`, playerID), 
+  by="First Lastname")
 
+# Let's check
+sum(is.na(bbwaa$playerID))
 ```
 
 SelectorGadget Result
 
 ```{r}
-# Demo on all players
+# Demo on all players webpage
 url <- "http://www.baseball-reference.com/players"
 html <- read_html(url)
-html %>% html_elements("") %>% html_text()
+html %>% html_elements(".page_index div a") %>% html_text()
+# We use selectorgadget to get our css selector: ".page_index div a"
 
 # Select Active Baseball Players with last name starting with A
+url <- "http://www.baseball-reference.com/players/a/"
+html <- read_html(url)
+html %>% html_elements("b a") %>% html_text()
+# We use selectorgadget to get our css selector: "b a"
+# Note this gives all players with last name starting with A from that webpage
 
+# Notice how all of these names have links attached to them, 
+# we can use html_attr() to access an attribute of an html node
+html %>% html_elements("b a") %>% html_attr(name="href")
 ```
 
 Your Turn - Fernando Abad
 
 ```{r}
 url <- "https://www.baseball-reference.com/players/a/abadfe01.shtml"
+html <- read_html(url)
 
+# Using selectorgadget, we get for the headers use "span strong"
+table_col_names <- html %>% 
+  html_elements("span strong") %>% 
+  html_text()
+table_col_names
+
+# Notice how last piece is "Fernando Abad", we can remove this because we do not want it:
+table_col_names <- html %>% 
+  html_elements("span strong") %>% 
+  html_text() %>% 
+  .[-length(.)]
+table_col_names
+
+# Or we use a different selectorgadget (not from slides), try "#info span strong" 
+# and we can see that this works as well
+table_col_names <- html %>% 
+  html_elements("#info span strong") %>% 
+  html_text()
+table_col_names
+
+# Now we want to get the stats from this table
+stats <- html %>% 
+  html_elements(".stats_pullout p") %>% 
+  html_text()
+stats # this looks good
+
+stats <- matrix(stats, nrow = 1) # convert stats to matrix
+stats <- as.data.frame(stats) # convert the stats matrix to dataframe
+colnames(stats) <- table_col_names # set the column names of stats as the table_col_names we created
+
+stats
 ```
-
-# Functions in R and your First Scraper
-
-```{r}
-url <- "https://www.baseball-reference.com/awards/hof_2025.shtml"
-library(rvest)
-site <- read_html(url)
-
-```
-
-First Function
-
-```{r}
-
-```
-
-Your Turn - Scraper Function
-
-```{r}
-bbwaa_scraper <- function(url) {
-}
-```
-
-Your Turn - Expanding
-
-```{r}
-
-```
-
