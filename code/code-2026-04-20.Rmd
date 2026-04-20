@@ -27,8 +27,7 @@ First Function
 Your Turn - Scraper Function
 
 ```{r}
-bbwaa_scraper <- function(url) {
-}
+
 ```
 
 Your Turn - Expanding
