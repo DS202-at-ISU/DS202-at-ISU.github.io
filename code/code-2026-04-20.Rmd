@@ -16,23 +16,107 @@ url <- "https://www.baseball-reference.com/awards/hof_2025.shtml"
 library(rvest)
 site <- read_html(url)
 
+# target the specific table
+site |> html_elements(css = "#hof_BBWAA") |>
+  html_table()
+
+# Fix the column names
+bbwaa <- site %>% html_element(css="#hof_BBWAA") %>% html_table() 
+colnames(bbwaa) <- bbwaa[1,]
+bbwaa <- bbwaa[-1,]
+head(bbwaa)
 ```
 
 First Function
 
 ```{r}
+mymean <- function(x) {
+    return(sum(x)/length(x))
+}
 
+mymean(1:15)
+## [1] 8
+mymean(c(1:15, NA))
+## [1] NA
+
+# Update by including another input argument, called na.rm, which we set to F by default
+mymean <- function(x, na.rm=F) {
+    if (na.rm) x <- na.omit(x)
+    return(sum(x)/length(x))
+}
+
+mymean(1:15)
+## [1] 8
+mymean(c(1:15, NA))
+## [1] NA
+mymean(x = c(1:15, NA), na.rm=T)
+## [1] 8
 ```
 
 Your Turn - Scraper Function
 
 ```{r}
+bbwaa_scraper <- function(url) {
+  site <- read_html(url)
+  bbwaa <- site %>% html_element("#hof_BBWAA") %>% html_table()
+  bbwaa
+}
 
+# test on 2024 page
+bbwaa_scraper("https://www.baseball-reference.com/awards/hof_2024.shtml")
+# test on 2025 page
+bbwaa_scraper("https://www.baseball-reference.com/awards/hof_2025.shtml")
+
+# Fix the first row 
+bbwaa_scraper <- function(url) {
+  site <- read_html(url)
+  bbwaa <- site %>% html_element("#hof_BBWAA") %>% html_table()
+  colnames(bbwaa) <- bbwaa[1,]
+  bbwaa <- bbwaa[-1,]
+  bbwaa
+}
+
+# test on 2024 page
+bbwaa_scraper("https://www.baseball-reference.com/awards/hof_2024.shtml")
+# test on 2025 page
+bbwaa_scraper("https://www.baseball-reference.com/awards/hof_2025.shtml")
 ```
 
 Your Turn - Expanding
 
 ```{r}
+bbwaa_scraper <- function(url, element) {
+  site <- read_html(url)
+  bbwaa <- site %>% html_element(element) %>% html_table()
+  colnames(bbwaa) <- bbwaa[1,]
+  bbwaa <- bbwaa[-1,]
+  bbwaa
+}
 
+# test on 2025
+bbwaa_scraper(url = "https://www.baseball-reference.com/awards/hof_2025.shtml",
+              element = "#hof_Veterans")
+
+# what if we do not include element?
+bbwaa_scraper(url = "https://www.baseball-reference.com/awards/hof_2025.shtml")
+# Error! argument for element is missing!
+
+# Fix the function by setting a default for element
+bbwaa_scraper <- function(url, element = "#hof_BBWAA") {
+  site <- read_html(url)
+  bbwaa <- site %>% html_element(element) %>% html_table()
+  colnames(bbwaa) <- bbwaa[1,]
+  bbwaa <- bbwaa[-1,]
+  bbwaa
+}
+
+# test on 2025
+# Here we override the default for element and set it to #hof_Veterans
+bbwaa_scraper(url = "https://www.baseball-reference.com/awards/hof_2025.shtml",
+              element = "#hof_Veterans")
+
+# what if we do not include element?
+bbwaa_scraper(url = "https://www.baseball-reference.com/awards/hof_2025.shtml")
+# It defaults back to using #hof_BBWAA and no error!
 ```
 
