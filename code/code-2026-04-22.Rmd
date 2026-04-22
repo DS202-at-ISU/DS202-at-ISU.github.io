@@ -9,3 +9,54 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Default continuous colour scheme / How to change
+
+```{r}
+library(tidyverse)
+
+
+```
+
+# Default discrete colour scheme / How to change
+
+```{r}
+
+
+```
+
+# Colour Gradients - Divergent Scheme
+
+```{r}
+
+```
+
+# Discrete Color Schemes - Brewer
+
+```{r}
+
+```
+
+# All Brewer Schemes
+
+```{r}
+
+```
+
+# Themes Examples
+
+```{r}
+
+```
+
+# Changing Elements Manually
+
+```{r}
+
+```
+
+# Wrapping this together
+
+```{r}
+
+```
+
