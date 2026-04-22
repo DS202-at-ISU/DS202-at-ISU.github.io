@@ -14,49 +14,120 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 
-
+# starting plot
+p1 <- mpg %>% filter(year == 2008) %>%
+  ggplot(aes(x = cty, y = hwy, colour = cyl)) +
+  geom_point()
+# check
+p1
+# notice plots are same, this is the default
+p1 + scale_colour_continuous()
+# adjust the default
+p1 + scale_colour_continuous(low = "red", high = "blue")
 ```
 
 # Default discrete colour scheme / How to change
 
 ```{r}
-
-
+# starting plot
+p2 <- mpg %>% filter(year == 2008) %>%
+  ggplot(aes(x = cty, y = hwy, colour = factor(cyl))) +
+  geom_point()
+p2
+# add discrete coloring
+p2 + scale_colour_discrete()
+# adjust from the default
+p2 + scale_colour_discrete(type = "qual", palette = "Set2")
 ```
 
 # Colour Gradients - Divergent Scheme
 
 ```{r}
-
+car_avg <- mean(mtcars$mpg)
+## [1] 20.09062
+mtcars %>% 
+  ggplot(aes(x = mpg, colour=mpg, y = 1)) + 
+  geom_vline(xintercept= car_avg) +
+  geom_point(size = 5) +
+  scale_colour_gradient2(midpoint = car_avg)
 ```
 
 # Discrete Color Schemes - Brewer
 
 ```{r}
-
+mtcars %>% 
+  ggplot(aes(x = mpg, colour=factor(cyl), y = 1)) + 
+  geom_point(size = 5) +
+  scale_color_brewer(type="qual")
 ```
 
 # All Brewer Schemes
 
 ```{r}
-
+library(RColorBrewer)
+# Check Brewer Schemes
+display.brewer.all()
 ```
 
 # Themes Examples
 
 ```{r}
+# starting plot
+p <- mpg %>% ggplot(aes(x = displ, y =  cty, colour = factor(class))) + geom_point()
+p
+# Add theme_grey (this is the default theme)
+p + theme_grey()
+# Another theme
+p + theme_bw()
 
+# Adding labels **************
+p + theme_bw() +
+  labs(
+    title = "Engine Size vs City MPG",
+    x = "Engine displacement",
+    y = "City MPG",
+    colour = "Vehicle class"
+  )
+
+# starting plot again
+p <- mtcars %>% ggplot(aes(x = wt, y =  mpg, colour= factor(cyl))) + geom_point()
+p
+# add themes
+p + theme_light()
+p + theme_dark()
+# Changing font size on plot (ie for presentations vs for reports)
+p + theme_light(base_size=18)
+p + theme_light(base_size=24)
 ```
 
 # Changing Elements Manually
 
 ```{r}
+# What looks bad?
+mpg %>% ggplot(aes(x = manufacturer)) + geom_bar()
+# Want to fix up x axis text
 
+# Lets rotate by 90 degrees
+mpg %>% ggplot(aes(x = manufacturer)) + geom_bar() +
+  theme(axis.text.x = element_text(angle=90, vjust=0.5, hjust=1))
+# Or rotate by 45 degrees
+mpg %>% ggplot(aes(x = manufacturer)) + geom_bar() +
+  theme(axis.text.x = element_text(angle=45, hjust=1))
 ```
 
 # Wrapping this together
 
 ```{r}
-
+# starting plot p again
+p <- mtcars %>% ggplot(aes(x = wt, y =  mpg, colour= factor(cyl))) + geom_point()
+# Let's tie a few things together we learned
+p +
+  scale_colour_brewer(type = "qual", palette = "Set2") +
+  theme_light(base_size = 16) +
+  labs(
+    title = "Engine Size vs City MPG",
+    x = "Engine Displacement",
+    y = "City MPG",
+    colour = "Vehicle Class"
+  )
 ```
-
