@@ -16,12 +16,12 @@ navigation:
   url: /labs.html
 - text: Homework
   url: /homework.html
-- text: Midterm
-  url: /midterm.html
-- text: Final Presentations
-  url: /presentations.html
-- text: Final Projects
-  url: /projects.html
+#- text: Midterm
+#  url: /midterm.html
+#- text: Final Presentations
+#  url: /presentations.html
+#- text: Final Projects
+#  url: /projects.html
 collections:
   topics:
     output: true
