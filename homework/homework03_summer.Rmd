@@ -26,7 +26,7 @@ In this activity we are going to
   
 ## Data Background
 
-The data was collected by FiveThirtyEight. This time we are interested in a review of life and death among the Avengers, a group of super heroes in the Marvel universe; the accompanying article is published [here](https://fivethirtyeight.com/features/avengers-death-comics-age-of-ultron/).
+The data was collected by FiveThirtyEight. This time we are interested in a review of life and death among the Avengers, a group of super heroes in the Marvel universe. The original FiveThirtyEight article is no longer available through the original link. For this assignment, use the dataset and accompanying data description link below.
 
 The description of the data is [here](https://github.com/fivethirtyeight/data/tree/master/avengers).
 
