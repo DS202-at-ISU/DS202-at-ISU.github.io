@@ -114,6 +114,8 @@ This homework builds on the lab by introducing data licensing and ethical consid
 
 3. What license governs the [Iowa Liquor Sales data](https://data.iowa.gov/Sales-Distribution/Iowa-Liquor-Sales/m3tr-qhgy)? What does this allow you to do with the data?
 
+Update (July 2): The Iowa Liquor Sales question may be disregarded; the linked data source is no longer active.
+
 4. Why do you think there are so many datasets on Kaggle that resemble one another without attribution?
 
 ## Part 2: Write Some Scrapers (**EXTRA CREDIT**)
